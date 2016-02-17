@@ -6,52 +6,63 @@ import {HTTP_PROVIDERS} from "angular2/http";
 
 
 @Component({
-  selector:'angular2-form',
-  template:`
+  selector: 'angular2-form',
+  template: `
     <h1>angular2 form</h1>
   `
 })
 
-class Angular2Form{}
+class Angular2Form {
+}
 
 
 @Component({
-  selector:"angular2-demo",
-  directives:[ROUTER_DIRECTIVES],
-  template : `
-    <div class="container">
-      <header>
-        <h1>{{title}}</h1>
-      </header>
+  selector: "angular2-demo",
+  directives: [ROUTER_DIRECTIVES],
+  template: `
+  <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <div class="navbar-brand">
+            <a href="#">
+              {{title}}
+            </a>
+          </div>
+        </div>
 
-      <div class="row">
-        <!--声明路由入口-->
-        <nav class="col-lg-12">
-          <b><a [routerLink]="['Todo']">Todo</a> </b>|
-          <b><a [routerLink]="['Form']">Form</a></b>
-        </nav>
+        <ul class="nav navbar-nav">
+          <li *ngFor="#nav of navList" [class.active]="isCurrent(nav)">
+            <a [routerLink]="[nav]">{{nav}}</a>
+          </li>
+        </ul>
       </div>
-
-      <div class="row">
-        <!--声明路由出口-->
-        <router-outlet></router-outlet>
-      </div>
-    </div>
+    </nav>
+  <div class="container-fluid">
+    <!--声明路由出口-->
+    <router-outlet></router-outlet>
+  </div>
 	`
 })
 
 @RouteConfig([
-  {path:"/todo", component:TodoList,as:"Todo"},
-  {path:"/form", component:Angular2Form,as:"Form"}
+  {path: "/todo", component: TodoList, name: "Todo", useAsDefault: true},
+  {path: "/form", component: Angular2Form, name: "Form"}
 ])
-class Angular2Demo{
+
+class Angular2Demo {
   private title:string;
   public router:Router;
-  constructor(@Inject(Router) rt,@Inject(LocationStrategy) ls){
-    this.title='Angular2 Demo';
-    ls.pushState = function(){};
+  locationStrategy:LocationStrategy;
+  navList:Array<string>;
+  constructor(@Inject(Router) rt, @Inject(LocationStrategy) ls) {
+    this.title = 'Angular2 Demo';
     this.router = rt;
+    this.locationStrategy=ls;
+    this.navList=['Todo','Form'];
+  }
+  isCurrent(path:String){
+    return this.locationStrategy.path()==='/'+path.toLowerCase();
   }
 }
 
-bootstrap(Angular2Demo,[ROUTER_PROVIDERS,HTTP_PROVIDERS]);
+bootstrap(Angular2Demo, [ROUTER_PROVIDERS, HTTP_PROVIDERS]);

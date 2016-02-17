@@ -10,8 +10,10 @@ import {TodoForm} from './todo.form';
   template: `
     <div>
       <todo-form [onSubmit]="onSubmit"></todo-form>
-      <ul class="list-unstyled">
-        <todo-item *ngFor="#todo of todoList" [todo]="todo">
+      <ul class="list-unstyled list-group">
+        <todo-item *ngFor="#todo of todoList"
+        class="list-group-item" [class.list-group-item-success]="todo.done"
+        [todo]="todo">
 
         </todo-item>
       </ul>
@@ -28,9 +30,7 @@ export class TodoList {
   }
 
   ngOnInit() {
-    this.ts.query(res=> {
-        this.todoList = res;
-      });
+    this.todoList=this.ts.query();
   }
 
 }

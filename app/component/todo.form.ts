@@ -9,7 +9,7 @@ import {TodoService} from '../services/todoService';
   template:`
     <form #f="ngForm" (submit)="onFormSubmit($event,f.value)">
       <div class="form-group">
-        <input class="form-control" ngControl="name">
+        <input class="form-control" ngControl="name" autofocus>
       </div>
     <form>
   `
@@ -17,17 +17,25 @@ import {TodoService} from '../services/todoService';
 
 export class TodoForm{
   public onSubmit:Function;
-  ts:TodoService;
-  constructor(ts:TodoService){
-    this.ts=ts;
+  todo:TodoService;
+  constructor(todo:TodoService){
+    this.todo=todo;
   }
   onFormSubmit(e,param){
     e.preventDefault();
-
+    e.target.reset();
     var todo:Todo=Object.assign({
-      done:false,
-      id:Math.floor(100*Math.random())
+      done:false
     },param);
-    this.ts.add(todo);
+    this.todo.save(todo);
+  }
+
+  reverse(str){
+    var len=str.length;
+    var result='';
+    while (len>0){
+      result+=str.charAt(len);
+      len--
+    }
   }
 }

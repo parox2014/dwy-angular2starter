@@ -1,7 +1,7 @@
 export interface Todo{
-  id:number;
+  ID:number;
   name:string;
-  description?:string;
-  done:boolean;
+  done?:boolean;
   createAt?:Date;
+  updateAt?:Date;
 }

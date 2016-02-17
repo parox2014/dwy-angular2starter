@@ -23,23 +23,31 @@ System.register(['angular2/core', "angular2/common", '../services/todoService'],
             }],
         execute: function() {
             TodoForm = (function () {
-                function TodoForm(ts) {
-                    this.ts = ts;
+                function TodoForm(todo) {
+                    this.todo = todo;
                 }
                 TodoForm.prototype.onFormSubmit = function (e, param) {
                     e.preventDefault();
+                    e.target.reset();
                     var todo = Object.assign({
-                        done: false,
-                        id: Math.floor(100 * Math.random())
+                        done: false
                     }, param);
-                    this.ts.add(todo);
+                    this.todo.save(todo);
+                };
+                TodoForm.prototype.reverse = function (str) {
+                    var len = str.length;
+                    var result = '';
+                    while (len > 0) {
+                        result += str.charAt(len);
+                        len--;
+                    }
                 };
                 TodoForm = __decorate([
                     core_1.Component({
                         selector: 'todo-form',
                         directives: [common_1.CORE_DIRECTIVES, common_1.FORM_DIRECTIVES],
                         inputs: ['onSubmit'],
-                        template: "\n    <form #f=\"ngForm\" (submit)=\"onFormSubmit($event,f.value)\">\n      <div class=\"form-group\">\n        <input class=\"form-control\" ngControl=\"name\">\n      </div>\n    <form>\n  "
+                        template: "\n    <form #f=\"ngForm\" (submit)=\"onFormSubmit($event,f.value)\">\n      <div class=\"form-group\">\n        <input class=\"form-control\" ngControl=\"name\" autofocus>\n      </div>\n    <form>\n  "
                     }), 
                     __metadata('design:paramtypes', [todoService_1.TodoService])
                 ], TodoForm);

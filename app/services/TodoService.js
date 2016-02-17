@@ -28,14 +28,24 @@ System.register(['angular2/http', 'angular2/core'], function(exports_1) {
                 TodoService.prototype._saveToLocalStorage = function () {
                     this.ls.setItem('todoList', JSON.stringify(this.todoList));
                 };
-                TodoService.prototype.query = function (callback) {
-                    callback(this.todoList);
+                TodoService.prototype.query = function (query) {
+                    //callback(this.todoList);
+                    return starterDB.queryAll("todos", { query: query });
                 };
-                TodoService.prototype.add = function (todo) {
-                    this.todoList.push(todo);
-                    this._saveToLocalStorage();
+                TodoService.prototype.save = function (todo) {
+                    todo.createAt = new Date();
+                    todo.updateAt = new Date();
+                    starterDB.insert('todos', todo);
+                    starterDB.commit();
                 };
                 TodoService.prototype.remove = function (todo) {
+                };
+                TodoService.prototype.updateById = function (id, update) {
+                    starterDB.insertOrUpdate("todos", { ID: id }, update);
+                    starterDB.commit();
+                };
+                TodoService.prototype.toggleDone = function (todo) {
+                    this.updateById(todo.ID, { done: todo.done });
                 };
                 TodoService = __decorate([
                     core_1.Injectable(), 
@@ -47,4 +57,4 @@ System.register(['angular2/http', 'angular2/core'], function(exports_1) {
         }
     }
 });
-//# sourceMappingURL=todoService.js.map
+//# sourceMappingURL=TodoService.js.map

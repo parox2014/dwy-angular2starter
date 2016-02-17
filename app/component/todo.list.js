@@ -30,17 +30,14 @@ System.register(['angular2/core', './todo.item', '../services/todoService', './t
                     this.ts = todoService;
                 }
                 TodoList.prototype.ngOnInit = function () {
-                    var _this = this;
-                    this.ts.query(function (res) {
-                        _this.todoList = res;
-                    });
+                    this.todoList = this.ts.query();
                 };
                 TodoList = __decorate([
                     core_1.Component({
                         selector: 'todo-list',
                         directives: [todo_item_1.TodoItem, todo_form_1.TodoForm],
                         providers: [todoService_1.TodoService],
-                        template: "\n    <div>\n      <todo-form [onSubmit]=\"onSubmit\"></todo-form>\n      <ul class=\"list-unstyled\">\n        <todo-item *ngFor=\"#todo of todoList\" [todo]=\"todo\">\n\n        </todo-item>\n      </ul>\n    </div>\n  "
+                        template: "\n    <div>\n      <todo-form [onSubmit]=\"onSubmit\"></todo-form>\n      <ul class=\"list-unstyled list-group\">\n        <todo-item *ngFor=\"#todo of todoList\"\n        class=\"list-group-item\" [class.list-group-item-success]=\"todo.done\"\n        [todo]=\"todo\">\n\n        </todo-item>\n      </ul>\n    </div>\n  "
                     }), 
                     __metadata('design:paramtypes', [todoService_1.TodoService])
                 ], TodoList);

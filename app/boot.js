@@ -46,18 +46,22 @@ System.register(['angular2/platform/browser', './component/todo.list', 'angular2
             Angular2Demo = (function () {
                 function Angular2Demo(rt, ls) {
                     this.title = 'Angular2 Demo';
-                    ls.pushState = function () { };
                     this.router = rt;
+                    this.locationStrategy = ls;
+                    this.navList = ['Todo', 'Form'];
                 }
+                Angular2Demo.prototype.isCurrent = function (path) {
+                    return this.locationStrategy.path() === '/' + path.toLowerCase();
+                };
                 Angular2Demo = __decorate([
                     core_1.Component({
                         selector: "angular2-demo",
                         directives: [router_1.ROUTER_DIRECTIVES],
-                        template: "\n    <div class=\"container\">\n      <header>\n        <h1>{{title}}</h1>\n      </header>\n\n      <div class=\"row\">\n        <!--\u58F0\u660E\u8DEF\u7531\u5165\u53E3-->\n        <nav class=\"col-lg-12\">\n          <b><a [routerLink]=\"['Todo']\">Todo</a> </b>|\n          <b><a [routerLink]=\"['Form']\">Form</a></b>\n        </nav>\n      </div>\n\n      <div class=\"row\">\n        <!--\u58F0\u660E\u8DEF\u7531\u51FA\u53E3-->\n        <router-outlet></router-outlet>\n      </div>\n    </div>\n\t"
+                        template: "\n  <nav class=\"navbar navbar-default\">\n      <div class=\"container-fluid\">\n        <div class=\"navbar-header\">\n          <div class=\"navbar-brand\">\n            <a href=\"#\">\n              {{title}}\n            </a>\n          </div>\n        </div>\n\n        <ul class=\"nav navbar-nav\">\n          <li *ngFor=\"#nav of navList\" [class.active]=\"isCurrent(nav)\">\n            <a [routerLink]=\"[nav]\">{{nav}}</a>\n          </li>\n        </ul>\n      </div>\n    </nav>\n  <div class=\"container-fluid\">\n    <!--\u58F0\u660E\u8DEF\u7531\u51FA\u53E3-->\n    <router-outlet></router-outlet>\n  </div>\n\t"
                     }),
                     router_1.RouteConfig([
-                        { path: "/todo", component: todo_list_1.TodoList, as: "Todo" },
-                        { path: "/form", component: Angular2Form, as: "Form" }
+                        { path: "/todo", component: todo_list_1.TodoList, name: "Todo", useAsDefault: true },
+                        { path: "/form", component: Angular2Form, name: "Form" }
                     ]),
                     __param(0, core_1.Inject(router_1.Router)),
                     __param(1, core_1.Inject(router_1.LocationStrategy)), 
