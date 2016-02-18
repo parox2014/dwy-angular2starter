@@ -18,7 +18,7 @@ export class TodoService {
    * @param sort
    * @returns {DebugElement[]|ng.DebugElement[]|ngWorker.DebugElement[]}
    */
-  query(query:Object, limit:number, sort:Array<string>):Array<Todo> {
+  query(query?:Object, limit?:number, sort?:Array<string>):Array<Todo> {
     limit = limit || 10;
     sort = sort || ['createAt','DESC'];
 

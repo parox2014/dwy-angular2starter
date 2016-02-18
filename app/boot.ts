@@ -3,6 +3,7 @@ import {TodoList} from './component/todo.list';
 import {Inject,Component} from 'angular2/core';
 import {LocationStrategy,RouteConfig,Router,ROUTER_DIRECTIVES,ROUTER_PROVIDERS} from "angular2/router";
 import {HTTP_PROVIDERS} from "angular2/http";
+import {TodoDetail} from './component/todo.detail';
 
 @Component({
   selector: 'angular2-form',
@@ -45,6 +46,7 @@ class Angular2Form {
 
 @RouteConfig([
   {path: "/todo", component: TodoList, name: "Todo", useAsDefault: true},
+  {path: "/todo/:id", component: TodoDetail, name: "TodoDetail"},
   {path: "/form", component: Angular2Form, name: "Form"}
 ])
 

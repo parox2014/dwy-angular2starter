@@ -1,4 +1,4 @@
-System.register(['angular2/core', '../pipes/datePipe'], function(exports_1) {
+System.register(['angular2/core', 'angular2/router', '../pipes/datePipe'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,21 +8,25 @@ System.register(['angular2/core', '../pipes/datePipe'], function(exports_1) {
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, datePipe_1;
+    var core_1, router_1, datePipe_1;
     var TodoItem;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
+            function (router_1_1) {
+                router_1 = router_1_1;
+            },
             function (datePipe_1_1) {
                 datePipe_1 = datePipe_1_1;
             }],
         execute: function() {
             TodoItem = (function () {
-                function TodoItem() {
+                function TodoItem(router) {
                     this.toggleDone = new core_1.EventEmitter();
                     this.remove = new core_1.EventEmitter();
+                    this.router = router;
                 }
                 TodoItem.prototype.onChange = function (e) {
                     this.todo.done = e.target.checked;
@@ -30,6 +34,9 @@ System.register(['angular2/core', '../pipes/datePipe'], function(exports_1) {
                 };
                 TodoItem.prototype.onRemoveBtnClick = function () {
                     this.remove.emit(this.todo.ID);
+                };
+                TodoItem.prototype.onTodoNameClick = function () {
+                    this.router.navigate(['TodoDetail', { id: this.todo.ID }]);
                 };
                 __decorate([
                     core_1.Output(), 
@@ -44,9 +51,10 @@ System.register(['angular2/core', '../pipes/datePipe'], function(exports_1) {
                         selector: 'todo-item',
                         inputs: ['todo'],
                         pipes: [datePipe_1.MyDate],
-                        template: "\n    <li [id]=\"todo.ID\" class=\"clearfix\">\n      <div class=\"col-md-1\">\n        <input type=\"checkbox\" [(ngModel)]=\"todo.done\" (change)=\"onChange($event)\">\n      </div>\n\n      <div class=\"col-md-3\">\n        <strong>{{todo.name}}</strong>\n      </div>\n\n      <div class=\"col-md-2\">\n        <span>{{todo.createAt|myDate}}</span>\n      </div>\n\n      <div class=\"col-md-2\">\n        <button class=\"btn btn-danger btn-xs\" (click)=\"onRemoveBtnClick()\">remove</button>\n      </div>\n\n    </li>\n  "
+                        directives: [router_1.ROUTER_DIRECTIVES],
+                        template: "\n    <li [id]=\"todo.ID\" class=\"clearfix\">\n      <div class=\"col-md-1\">\n        <input type=\"checkbox\" [(ngModel)]=\"todo.done\" (change)=\"onChange($event)\">\n      </div>\n\n      <div class=\"col-md-3\">\n        <a href=\"javascript:;\" (click)=\"onTodoNameClick()\">\n          <strong>{{todo.name}}</strong>\n        </a>\n      </div>\n\n      <div class=\"col-md-2\">\n        <span>{{todo.createAt|myDate}}</span>\n      </div>\n\n      <div class=\"col-md-2\">\n        <button class=\"btn btn-danger btn-xs\" (click)=\"onRemoveBtnClick()\">remove</button>\n      </div>\n\n    </li>\n  "
                     }), 
-                    __metadata('design:paramtypes', [])
+                    __metadata('design:paramtypes', [router_1.Router])
                 ], TodoItem);
                 return TodoItem;
             })();

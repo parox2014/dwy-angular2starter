@@ -1,4 +1,4 @@
-System.register(['angular2/platform/browser', './component/todo.list', 'angular2/core', "angular2/router", "angular2/http"], function(exports_1) {
+System.register(['angular2/platform/browser', './component/todo.list', 'angular2/core', "angular2/router", "angular2/http", './component/todo.detail'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11,7 +11,7 @@ System.register(['angular2/platform/browser', './component/todo.list', 'angular2
     var __param = (this && this.__param) || function (paramIndex, decorator) {
         return function (target, key) { decorator(target, key, paramIndex); }
     };
-    var browser_1, todo_list_1, core_1, router_1, http_1;
+    var browser_1, todo_list_1, core_1, router_1, http_1, todo_detail_1;
     var Angular2Form, Angular2Demo;
     return {
         setters:[
@@ -29,6 +29,9 @@ System.register(['angular2/platform/browser', './component/todo.list', 'angular2
             },
             function (http_1_1) {
                 http_1 = http_1_1;
+            },
+            function (todo_detail_1_1) {
+                todo_detail_1 = todo_detail_1_1;
             }],
         execute: function() {
             Angular2Form = (function () {
@@ -61,6 +64,7 @@ System.register(['angular2/platform/browser', './component/todo.list', 'angular2
                     }),
                     router_1.RouteConfig([
                         { path: "/todo", component: todo_list_1.TodoList, name: "Todo", useAsDefault: true },
+                        { path: "/todo/:id", component: todo_detail_1.TodoDetail, name: "TodoDetail" },
                         { path: "/form", component: Angular2Form, name: "Form" }
                     ]),
                     __param(0, core_1.Inject(router_1.Router)),
