@@ -57,7 +57,7 @@ System.register(['angular2/platform/browser', './component/todo.list', 'angular2
                     core_1.Component({
                         selector: "angular2-demo",
                         directives: [router_1.ROUTER_DIRECTIVES],
-                        template: "\n  <nav class=\"navbar navbar-default\">\n      <div class=\"container-fluid\">\n        <div class=\"navbar-header\">\n          <div class=\"navbar-brand\">\n            <a href=\"#\">\n              {{title}}\n            </a>\n          </div>\n        </div>\n\n        <ul class=\"nav navbar-nav\">\n          <li *ngFor=\"#nav of navList\" [class.active]=\"isCurrent(nav)\">\n            <a [routerLink]=\"[nav]\">{{nav}}</a>\n          </li>\n        </ul>\n      </div>\n    </nav>\n  <div class=\"container-fluid\">\n    <!--\u58F0\u660E\u8DEF\u7531\u51FA\u53E3-->\n    <router-outlet></router-outlet>\n  </div>\n\t"
+                        template: "\n  <nav class=\"navbar navbar-default\">\n      <div class=\"container-fluid\">\n        <div class=\"navbar-header\">\n          <div class=\"navbar-brand\">\n            <a href=\"#\">\n              {{title}}\n            </a>\n          </div>\n        </div>\n\n        <ul class=\"nav navbar-nav\">\n          <li *ngFor=\"#nav of navList\" [class.active]=\"isCurrent(nav)\">\n            <a [routerLink]=\"[nav]\">{{nav}}</a>\n          </li>\n        </ul>\n      </div>\n    </nav>\n  <div class=\"container\">\n    <!--\u58F0\u660E\u8DEF\u7531\u51FA\u53E3-->\n    <router-outlet></router-outlet>\n  </div>\n\t"
                     }),
                     router_1.RouteConfig([
                         { path: "/todo", component: todo_list_1.TodoList, name: "Todo", useAsDefault: true },

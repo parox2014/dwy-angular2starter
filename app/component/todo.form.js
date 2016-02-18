@@ -1,4 +1,4 @@
-System.register(['angular2/core', "angular2/common", '../services/todoService'], function(exports_1) {
+System.register(['angular2/core', "angular2/common"], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(['angular2/core', "angular2/common", '../services/todoService'],
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, common_1, todoService_1;
+    var core_1, common_1;
     var TodoForm;
     return {
         setters:[
@@ -17,14 +17,11 @@ System.register(['angular2/core', "angular2/common", '../services/todoService'],
             },
             function (common_1_1) {
                 common_1 = common_1_1;
-            },
-            function (todoService_1_1) {
-                todoService_1 = todoService_1_1;
             }],
         execute: function() {
             TodoForm = (function () {
-                function TodoForm(todo) {
-                    this.todo = todo;
+                function TodoForm() {
+                    this.formSubmit = new core_1.EventEmitter();
                 }
                 TodoForm.prototype.onFormSubmit = function (e, param) {
                     e.preventDefault();
@@ -32,24 +29,19 @@ System.register(['angular2/core', "angular2/common", '../services/todoService'],
                     var todo = Object.assign({
                         done: false
                     }, param);
-                    this.todo.save(todo);
+                    this.formSubmit.emit(todo);
                 };
-                TodoForm.prototype.reverse = function (str) {
-                    var len = str.length;
-                    var result = '';
-                    while (len > 0) {
-                        result += str.charAt(len);
-                        len--;
-                    }
-                };
+                __decorate([
+                    core_1.Output(), 
+                    __metadata('design:type', Object)
+                ], TodoForm.prototype, "formSubmit", void 0);
                 TodoForm = __decorate([
                     core_1.Component({
                         selector: 'todo-form',
                         directives: [common_1.CORE_DIRECTIVES, common_1.FORM_DIRECTIVES],
-                        inputs: ['onSubmit'],
                         template: "\n    <form #f=\"ngForm\" (submit)=\"onFormSubmit($event,f.value)\">\n      <div class=\"form-group\">\n        <input class=\"form-control\" ngControl=\"name\" autofocus>\n      </div>\n    <form>\n  "
                     }), 
-                    __metadata('design:paramtypes', [todoService_1.TodoService])
+                    __metadata('design:paramtypes', [])
                 ], TodoForm);
                 return TodoForm;
             })();

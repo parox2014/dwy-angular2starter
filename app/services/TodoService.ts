@@ -1,4 +1,4 @@
-import {Http} from 'angular2/http';
+import {Http,URLSearchParams,BaseRequestOptions,RequestMethod,RequestOptionsArgs} from 'angular2/http';
 import {Todo} from '../interfaces/todo';
 import {Injectable} from 'angular2/core';
 
@@ -6,44 +6,50 @@ import {Injectable} from 'angular2/core';
 
 export class TodoService {
   private http:Http;
-  public todoList:Array<Todo>;
-  private ls:any;
 
   constructor(http:Http) {
     this.http = http;
-    this.ls = window.localStorage;
-    this.todoList = JSON.parse(this.ls.getItem('todoList')) || [];
   }
 
-  private _saveToLocalStorage() {
-    this.ls.setItem('todoList', JSON.stringify(this.todoList));
+  /**
+   * query todo list
+   * @param query
+   * @param limit
+   * @param sort
+   * @returns {DebugElement[]|ng.DebugElement[]|ngWorker.DebugElement[]}
+   */
+  query(query:Object, limit:number, sort:Array<string>):Array<Todo> {
+    limit = limit || 10;
+    sort = sort || ['createAt','DESC'];
+
+    return starterDB.queryAll("todos", {
+      query: query,
+      limit: limit,
+      sort: [sort]
+    });
   }
 
-  query(query) {
-    //callback(this.todoList);
-    return starterDB.queryAll("todos", {query: query});
-  }
+  save(todo:Todo):void {
 
-  save(todo:Todo) {
+    todo.createAt = new Date();
+    todo.updateAt = new Date();
 
-    todo.createAt=new Date();
-    todo.updateAt=new Date();
-
-    starterDB.insert('todos',todo);
+    starterDB.insert('todos', todo);
 
     starterDB.commit();
   }
 
-  remove(todo) {
-
+  removeById(id:number):void {
+    starterDB.deleteRows('todos',{ID:id});
+    starterDB.commit();
   }
 
-  updateById(id:number,update:Object){
+  updateById(id:number, update:Object):void {
     starterDB.insertOrUpdate("todos", {ID: id}, update);
     starterDB.commit();
   }
 
-  toggleDone(todo:Todo){
-    this.updateById(todo.ID,{done:todo.done})
+  toggleDone(todo:Todo):void {
+    this.updateById(todo.ID, {done: todo.done})
   }
 }

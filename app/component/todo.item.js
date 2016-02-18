@@ -1,4 +1,4 @@
-System.register(['angular2/core', '../pipes/datePipe', '../services/TodoService'], function(exports_1) {
+System.register(['angular2/core', '../pipes/datePipe'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(['angular2/core', '../pipes/datePipe', '../services/TodoService'
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, datePipe_1, TodoService_1;
+    var core_1, datePipe_1;
     var TodoItem;
     return {
         setters:[
@@ -17,28 +17,36 @@ System.register(['angular2/core', '../pipes/datePipe', '../services/TodoService'
             },
             function (datePipe_1_1) {
                 datePipe_1 = datePipe_1_1;
-            },
-            function (TodoService_1_1) {
-                TodoService_1 = TodoService_1_1;
             }],
         execute: function() {
             TodoItem = (function () {
-                function TodoItem(ts) {
-                    this._todoService = ts;
+                function TodoItem() {
+                    this.toggleDone = new core_1.EventEmitter();
+                    this.remove = new core_1.EventEmitter();
                 }
                 TodoItem.prototype.onChange = function (e) {
                     this.todo.done = e.target.checked;
-                    this._todoService.toggleDone(this.todo);
+                    this.toggleDone.emit(this.todo);
                 };
+                TodoItem.prototype.onRemoveBtnClick = function () {
+                    this.remove.emit(this.todo.ID);
+                };
+                __decorate([
+                    core_1.Output(), 
+                    __metadata('design:type', Object)
+                ], TodoItem.prototype, "toggleDone", void 0);
+                __decorate([
+                    core_1.Output(), 
+                    __metadata('design:type', Object)
+                ], TodoItem.prototype, "remove", void 0);
                 TodoItem = __decorate([
                     core_1.Component({
                         selector: 'todo-item',
                         inputs: ['todo'],
                         pipes: [datePipe_1.MyDate],
-                        providers: [TodoService_1.TodoService],
-                        template: "\n    <li [id]=\"todo.ID\">\n      <input type=\"checkbox\" [(ngModel)]=\"todo.done\" (change)=\"onChange($event)\">\n      <span>{{todo.name}}</span>\n      <span>{{todo.createAt|myDate}}</span>\n      <span>{{todo.done}}</span>\n    </li>\n  "
+                        template: "\n    <li [id]=\"todo.ID\" class=\"clearfix\">\n      <div class=\"col-md-1\">\n        <input type=\"checkbox\" [(ngModel)]=\"todo.done\" (change)=\"onChange($event)\">\n      </div>\n\n      <div class=\"col-md-3\">\n        <strong>{{todo.name}}</strong>\n      </div>\n\n      <div class=\"col-md-2\">\n        <span>{{todo.createAt|myDate}}</span>\n      </div>\n\n      <div class=\"col-md-2\">\n        <button class=\"btn btn-danger btn-xs\" (click)=\"onRemoveBtnClick()\">remove</button>\n      </div>\n\n    </li>\n  "
                     }), 
-                    __metadata('design:paramtypes', [TodoService_1.TodoService])
+                    __metadata('design:paramtypes', [])
                 ], TodoItem);
                 return TodoItem;
             })();

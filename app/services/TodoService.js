@@ -22,15 +22,22 @@ System.register(['angular2/http', 'angular2/core'], function(exports_1) {
             TodoService = (function () {
                 function TodoService(http) {
                     this.http = http;
-                    this.ls = window.localStorage;
-                    this.todoList = JSON.parse(this.ls.getItem('todoList')) || [];
                 }
-                TodoService.prototype._saveToLocalStorage = function () {
-                    this.ls.setItem('todoList', JSON.stringify(this.todoList));
-                };
-                TodoService.prototype.query = function (query) {
-                    //callback(this.todoList);
-                    return starterDB.queryAll("todos", { query: query });
+                /**
+                 * query todo list
+                 * @param query
+                 * @param limit
+                 * @param sort
+                 * @returns {DebugElement[]|ng.DebugElement[]|ngWorker.DebugElement[]}
+                 */
+                TodoService.prototype.query = function (query, limit, sort) {
+                    limit = limit || 10;
+                    sort = sort || ['createAt', 'DESC'];
+                    return starterDB.queryAll("todos", {
+                        query: query,
+                        limit: limit,
+                        sort: [sort]
+                    });
                 };
                 TodoService.prototype.save = function (todo) {
                     todo.createAt = new Date();
@@ -38,7 +45,9 @@ System.register(['angular2/http', 'angular2/core'], function(exports_1) {
                     starterDB.insert('todos', todo);
                     starterDB.commit();
                 };
-                TodoService.prototype.remove = function (todo) {
+                TodoService.prototype.removeById = function (id) {
+                    starterDB.deleteRows('todos', { ID: id });
+                    starterDB.commit();
                 };
                 TodoService.prototype.updateById = function (id, update) {
                     starterDB.insertOrUpdate("todos", { ID: id }, update);
@@ -57,4 +66,4 @@ System.register(['angular2/http', 'angular2/core'], function(exports_1) {
         }
     }
 });
-//# sourceMappingURL=TodoService.js.map
+//# sourceMappingURL=todoService.js.map

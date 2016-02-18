@@ -4,7 +4,6 @@ import {Inject,Component} from 'angular2/core';
 import {LocationStrategy,RouteConfig,Router,ROUTER_DIRECTIVES,ROUTER_PROVIDERS} from "angular2/router";
 import {HTTP_PROVIDERS} from "angular2/http";
 
-
 @Component({
   selector: 'angular2-form',
   template: `
@@ -37,7 +36,7 @@ class Angular2Form {
         </ul>
       </div>
     </nav>
-  <div class="container-fluid">
+  <div class="container">
     <!--声明路由出口-->
     <router-outlet></router-outlet>
   </div>
