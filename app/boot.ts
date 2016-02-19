@@ -3,6 +3,7 @@ import {bootstrap} from 'angular2/platform/browser'
 import {Inject,Component} from 'angular2/core';
 import {LocationStrategy,RouteConfig,Router,ROUTER_DIRECTIVES,ROUTER_PROVIDERS} from "angular2/router";
 import {HTTP_PROVIDERS} from "angular2/http";
+import {TodoService} from './services/TodoService';
 
 import {TodoList} from './todo/todo.list';
 import {TodoDetail} from './todo/todo.detail';
@@ -45,16 +46,11 @@ import {ProfileForm} from './form/profile.form';
 ])
 
 class Angular2Demo {
-  private title:string;
-  public router:Router;
-  locationStrategy:LocationStrategy;
-  navList:Array<string>;
-  constructor(@Inject(Router) rt, @Inject(LocationStrategy) ls) {
-    this.title = 'Angular2 Demo';
-    this.router = rt;
-    this.locationStrategy=ls;
-    this.navList=['Todo','ProfileForm'];
+  private title='Angular2 Demo';
+  private navList=['Todo','ProfileForm'];
+  constructor(private router:Router, private locationStrategy:LocationStrategy) {
+
   }
 }
 
-bootstrap(Angular2Demo, [ROUTER_PROVIDERS, HTTP_PROVIDERS]);
+bootstrap(Angular2Demo, [ROUTER_PROVIDERS, HTTP_PROVIDERS,TodoService]);

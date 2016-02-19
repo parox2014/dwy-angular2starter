@@ -23,10 +23,9 @@ System.register(['angular2/core', 'angular2/router', '../pipes/datePipe'], funct
             }],
         execute: function() {
             TodoItem = (function () {
-                function TodoItem(router) {
+                function TodoItem() {
                     this.toggleDone = new core_1.EventEmitter();
                     this.remove = new core_1.EventEmitter();
-                    this.router = router;
                 }
                 TodoItem.prototype.onChange = function (e) {
                     this.todo.done = e.target.checked;
@@ -35,9 +34,10 @@ System.register(['angular2/core', 'angular2/router', '../pipes/datePipe'], funct
                 TodoItem.prototype.onRemoveBtnClick = function () {
                     this.remove.emit(this.todo.ID);
                 };
-                TodoItem.prototype.onTodoNameClick = function () {
-                    this.router.navigate(['TodoDetail', { id: this.todo.ID }]);
-                };
+                __decorate([
+                    core_1.Input(), 
+                    __metadata('design:type', Object)
+                ], TodoItem.prototype, "todo", void 0);
                 __decorate([
                     core_1.Output(), 
                     __metadata('design:type', Object)
@@ -49,12 +49,12 @@ System.register(['angular2/core', 'angular2/router', '../pipes/datePipe'], funct
                 TodoItem = __decorate([
                     core_1.Component({
                         selector: 'todo-item',
-                        inputs: ['todo'],
+                        //inputs:['todo'],
                         pipes: [datePipe_1.MyDate],
                         directives: [router_1.ROUTER_DIRECTIVES],
-                        template: "\n    <li [id]=\"todo.ID\" class=\"clearfix\">\n      <div class=\"col-md-1\">\n        <input type=\"checkbox\" [(ngModel)]=\"todo.done\" (change)=\"onChange($event)\">\n      </div>\n\n      <div class=\"col-md-3\">\n        <a href=\"javascript:;\" (click)=\"onTodoNameClick()\">\n          <strong>{{todo.name}}</strong>\n        </a>\n      </div>\n\n      <div class=\"col-md-2\">\n        <span>{{todo.createAt|myDate}}</span>\n      </div>\n\n      <div class=\"col-md-2\">\n        <button class=\"btn btn-danger btn-xs\" (click)=\"onRemoveBtnClick()\">remove</button>\n      </div>\n\n    </li>\n  "
+                        template: "\n    <li [id]=\"todo.ID\" class=\"clearfix\">\n      <div class=\"col-md-1\">\n        <input type=\"checkbox\" [(ngModel)]=\"todo.done\" (change)=\"onChange($event)\">\n      </div>\n\n      <div class=\"col-md-3\">\n        <!--<a href=\"javascript:;\" (click)=\"onTodoNameClick()\">-->\n          <!--<strong>{{todo.name}}</strong>-->\n        <!--</a>-->\n\n        <a [routerLink]=\"['TodoDetail',{id:todo.ID}]\">\n          <strong>{{todo.name}}</strong>\n        </a>\n      </div>\n\n      <div class=\"col-md-2\">\n        <span>{{todo.createAt|myDate}}</span>\n      </div>\n\n      <div class=\"col-md-2\">\n        <button class=\"btn btn-danger btn-xs\" (click)=\"onRemoveBtnClick()\">remove</button>\n      </div>\n\n    </li>\n  "
                     }), 
-                    __metadata('design:paramtypes', [router_1.Router])
+                    __metadata('design:paramtypes', [])
                 ], TodoItem);
                 return TodoItem;
             })();

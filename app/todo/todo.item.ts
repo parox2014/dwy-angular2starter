@@ -1,11 +1,11 @@
-import {Component,Output,EventEmitter} from 'angular2/core';
+import {Component,Output,Input,EventEmitter} from 'angular2/core';
 import {Router,ROUTER_DIRECTIVES} from 'angular2/router';
 import {Todo} from '../interfaces/todo';
 import {MyDate} from '../pipes/datePipe';
 
 @Component({
   selector:'todo-item',
-  inputs:['todo'],
+  //inputs:['todo'],
   pipes:[MyDate],
   directives: [ROUTER_DIRECTIVES],
   template:`
@@ -15,7 +15,11 @@ import {MyDate} from '../pipes/datePipe';
       </div>
 
       <div class="col-md-3">
-        <a href="javascript:;" (click)="onTodoNameClick()">
+        <!--<a href="javascript:;" (click)="onTodoNameClick()">-->
+          <!--<strong>{{todo.name}}</strong>-->
+        <!--</a>-->
+
+        <a [routerLink]="['TodoDetail',{id:todo.ID}]">
           <strong>{{todo.name}}</strong>
         </a>
       </div>
@@ -33,15 +37,12 @@ import {MyDate} from '../pipes/datePipe';
 })
 
 export class TodoItem{
-  public todo:Todo;
 
-  router:Router;
+  @Input() todo:Todo;
 
   @Output() toggleDone=new EventEmitter();
   @Output() remove=new EventEmitter();
-  constructor(router:Router){
-    this.router=router;
-  }
+  constructor(){}
   onChange(e:any){
     this.todo.done=e.target.checked;
     this.toggleDone.emit(this.todo);
@@ -49,8 +50,5 @@ export class TodoItem{
 
   onRemoveBtnClick(){
     this.remove.emit(this.todo.ID);
-  }
-  onTodoNameClick(){
-    this.router.navigate(['TodoDetail',{id:this.todo.ID}]);
   }
 }

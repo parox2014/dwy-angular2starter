@@ -1,14 +1,17 @@
 import {Http,URLSearchParams,BaseRequestOptions,RequestMethod,RequestOptionsArgs} from 'angular2/http';
 import {Todo} from '../interfaces/todo';
-import {Injectable} from 'angular2/core';
+import {Injectable,Injector} from 'angular2/core';
+
+var id=0;
 
 @Injectable()
 
 export class TodoService {
   private http:Http;
-
+  id:number;
   constructor(http:Http) {
     this.http = http;
+    this.id=id+1;
   }
 
   /**
@@ -29,6 +32,10 @@ export class TodoService {
     });
   }
 
+  /**
+   * create todo
+   * @param todo
+   */
   save(todo:Todo):void {
 
     todo.createAt = new Date();
@@ -39,6 +46,10 @@ export class TodoService {
     starterDB.commit();
   }
 
+  /**
+   * remove todo by id
+   * @param id
+   */
   removeById(id:number):void {
     starterDB.deleteRows('todos',{ID:id});
     starterDB.commit();

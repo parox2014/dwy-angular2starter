@@ -29,9 +29,12 @@ System.register(['angular2/core', './todo.item', '../services/TodoService', './t
             }],
         execute: function() {
             TodoList = (function () {
-                function TodoList(todoService) {
-                    this.currentFilter = 'All';
+                //如果前面加了private 或者public修饰，该属性或自动成为类的成员
+                function TodoList(todoService, ele) {
                     this.todoService = todoService;
+                    this.ele = ele;
+                    this.currentFilter = 'All';
+                    //var animate=new Animation(ele,{});
                 }
                 TodoList.prototype.ngOnInit = function () {
                     this.todoList = this.queryListByFilter(this.currentFilter);
@@ -74,10 +77,9 @@ System.register(['angular2/core', './todo.item', '../services/TodoService', './t
                     core_1.Component({
                         selector: 'todo-list',
                         directives: [todo_item_1.TodoItem, todo_form_1.TodoForm, todo_filter_1.TodoFilter],
-                        providers: [TodoService_1.TodoService],
-                        template: "\n    <div>\n      <todo-form (formSubmit)=\"createTodo($event)\"></todo-form>\n      <div class=\"panel panel-default\">\n        <div class=\"panel-heading\" todo-filter=\"All\" (filterChange)=\"onFilterChange($event)\"></div>\n\n        <div class=\"panel-body\">\n          <ul class=\"list-unstyled list-group\">\n            <todo-item *ngFor=\"#todo of todoList\"\n            (toggleDone)=\"onToggleDone(todo)\"\n            (remove)=\"onRemove($event)\"\n            class=\"list-group-item\" [class.list-group-item-success]=\"todo.done\"\n            [todo]=\"todo\">\n            </todo-item>\n          </ul>\n        </div>\n\n        <div class=\"panel-footer\">\n          {{todoList.length}}\n        </div>\n      </div>\n\n\n    </div>\n  "
+                        template: "\n    <div>\n      <todo-form (formSubmit)=\"createTodo($event)\"></todo-form>\n      <div class=\"panel panel-default\">\n        <div class=\"panel-heading\" todo-filter=\"All\" (filterChange)=\"onFilterChange($event)\"></div>\n\n        <div class=\"panel-body\">\n          <ul class=\"list-unstyled list-group\">\n            <todo-item *ngFor=\"#todo of todoList\"\n            (toggleDone)=\"onToggleDone(todo)\"\n            (remove)=\"onRemove($event)\"\n            class=\"list-group-item\" [ngClass]=\"{'list-group-item-success':todo.done}\"\n            [todo]=\"todo\">\n            </todo-item>\n          </ul>\n        </div>\n\n        <div class=\"panel-footer\">\n          {{todoList.length}}\n        </div>\n      </div>\n\n\n    </div>\n  "
                     }), 
-                    __metadata('design:paramtypes', [TodoService_1.TodoService])
+                    __metadata('design:paramtypes', [TodoService_1.TodoService, core_1.ElementRef])
                 ], TodoList);
                 return TodoList;
             })();

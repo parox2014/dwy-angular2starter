@@ -9,7 +9,7 @@ System.register(['angular2/http', 'angular2/core'], function(exports_1) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var http_1, core_1;
-    var TodoService;
+    var id, TodoService;
     return {
         setters:[
             function (http_1_1) {
@@ -19,9 +19,11 @@ System.register(['angular2/http', 'angular2/core'], function(exports_1) {
                 core_1 = core_1_1;
             }],
         execute: function() {
+            id = 0;
             TodoService = (function () {
                 function TodoService(http) {
                     this.http = http;
+                    this.id = id + 1;
                 }
                 /**
                  * query todo list
@@ -39,12 +41,20 @@ System.register(['angular2/http', 'angular2/core'], function(exports_1) {
                         sort: [sort]
                     });
                 };
+                /**
+                 * create todo
+                 * @param todo
+                 */
                 TodoService.prototype.save = function (todo) {
                     todo.createAt = new Date();
                     todo.updateAt = new Date();
                     starterDB.insert('todos', todo);
                     starterDB.commit();
                 };
+                /**
+                 * remove todo by id
+                 * @param id
+                 */
                 TodoService.prototype.removeById = function (id) {
                     starterDB.deleteRows('todos', { ID: id });
                     starterDB.commit();

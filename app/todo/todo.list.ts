@@ -1,14 +1,14 @@
-import {Component} from 'angular2/core';
+import {Component,ElementRef} from 'angular2/core';
 import {TodoItem} from './todo.item';
 import {Todo} from '../interfaces/todo';
 import {TodoService} from '../services/TodoService';
 import {TodoForm} from './todo.form';
 import {TodoFilter} from './todo.filter';
+import {CanDeactivate} from 'angular2/router';
 
 @Component({
   selector: 'todo-list',
   directives: [TodoItem,TodoForm,TodoFilter],
-  providers:[TodoService],
   template: `
     <div>
       <todo-form (formSubmit)="createTodo($event)"></todo-form>
@@ -20,7 +20,7 @@ import {TodoFilter} from './todo.filter';
             <todo-item *ngFor="#todo of todoList"
             (toggleDone)="onToggleDone(todo)"
             (remove)="onRemove($event)"
-            class="list-group-item" [class.list-group-item-success]="todo.done"
+            class="list-group-item" [ngClass]="{'list-group-item-success':todo.done}"
             [todo]="todo">
             </todo-item>
           </ul>
@@ -37,16 +37,18 @@ import {TodoFilter} from './todo.filter';
 })
 
 export class TodoList {
-  public todoList:Array<Todo>;
-  private todoService:TodoService;
-  private currentFilter='All';
-  constructor(todoService:TodoService) {
-    this.todoService = todoService;
+  todoList:Array<Todo>;
+  currentFilter='All';
+
+  //如果前面加了private 或者public修饰，该属性或自动成为类的成员
+  constructor(private todoService:TodoService,private ele:ElementRef) {
+    //var animate=new Animation(ele,{});
   }
 
   ngOnInit() {
     this.todoList=this.queryListByFilter(this.currentFilter);
   }
+
   createTodo(todo:Todo){
     this.todoService.save(todo);
     this.todoList=this.queryListByFilter(this.currentFilter)

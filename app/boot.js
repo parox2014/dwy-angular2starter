@@ -1,4 +1,4 @@
-System.register(['angular2/platform/browser', 'angular2/core', "angular2/router", "angular2/http", './todo/todo.list', './todo/todo.detail', './form/profile.form'], function(exports_1) {
+System.register(['angular2/platform/browser', 'angular2/core', "angular2/router", "angular2/http", './services/TodoService', './todo/todo.list', './todo/todo.detail', './form/profile.form'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,10 +8,7 @@ System.register(['angular2/platform/browser', 'angular2/core', "angular2/router"
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var __param = (this && this.__param) || function (paramIndex, decorator) {
-        return function (target, key) { decorator(target, key, paramIndex); }
-    };
-    var browser_1, core_1, router_1, http_1, todo_list_1, todo_detail_1, profile_form_1;
+    var browser_1, core_1, router_1, http_1, TodoService_1, todo_list_1, todo_detail_1, profile_form_1;
     var Angular2Demo;
     return {
         setters:[
@@ -27,6 +24,9 @@ System.register(['angular2/platform/browser', 'angular2/core', "angular2/router"
             function (http_1_1) {
                 http_1 = http_1_1;
             },
+            function (TodoService_1_1) {
+                TodoService_1 = TodoService_1_1;
+            },
             function (todo_list_1_1) {
                 todo_list_1 = todo_list_1_1;
             },
@@ -38,10 +38,10 @@ System.register(['angular2/platform/browser', 'angular2/core', "angular2/router"
             }],
         execute: function() {
             Angular2Demo = (function () {
-                function Angular2Demo(rt, ls) {
+                function Angular2Demo(router, locationStrategy) {
+                    this.router = router;
+                    this.locationStrategy = locationStrategy;
                     this.title = 'Angular2 Demo';
-                    this.router = rt;
-                    this.locationStrategy = ls;
                     this.navList = ['Todo', 'ProfileForm'];
                 }
                 Angular2Demo = __decorate([
@@ -55,14 +55,12 @@ System.register(['angular2/platform/browser', 'angular2/core', "angular2/router"
                         { path: "/todo", component: todo_list_1.TodoList, name: "Todo", useAsDefault: true },
                         { path: "/todo/:id", component: todo_detail_1.TodoDetail, name: "TodoDetail" },
                         { path: "/profile-form", component: profile_form_1.ProfileForm, name: "ProfileForm" }
-                    ]),
-                    __param(0, core_1.Inject(router_1.Router)),
-                    __param(1, core_1.Inject(router_1.LocationStrategy)), 
-                    __metadata('design:paramtypes', [Object, Object])
+                    ]), 
+                    __metadata('design:paramtypes', [router_1.Router, router_1.LocationStrategy])
                 ], Angular2Demo);
                 return Angular2Demo;
             })();
-            browser_1.bootstrap(Angular2Demo, [router_1.ROUTER_PROVIDERS, http_1.HTTP_PROVIDERS]);
+            browser_1.bootstrap(Angular2Demo, [router_1.ROUTER_PROVIDERS, http_1.HTTP_PROVIDERS, TodoService_1.TodoService]);
         }
     }
 });
