@@ -1,7 +1,7 @@
 import {Component} from 'angular2/core';
 import {TodoItem} from './todo.item';
 import {Todo} from '../interfaces/todo';
-import {TodoService} from '../services/todoService';
+import {TodoService} from '../services/TodoService';
 import {TodoForm} from './todo.form';
 import {TodoFilter} from './todo.filter';
 
@@ -13,7 +13,7 @@ import {TodoFilter} from './todo.filter';
     <div>
       <todo-form (formSubmit)="createTodo($event)"></todo-form>
       <div class="panel panel-default">
-        <div class="panel-heading" todo-filter="Done" (filterChange)="onFilterChange($event)"></div>
+        <div class="panel-heading" todo-filter="All" (filterChange)="onFilterChange($event)"></div>
 
         <div class="panel-body">
           <ul class="list-unstyled list-group">
@@ -39,7 +39,7 @@ import {TodoFilter} from './todo.filter';
 export class TodoList {
   public todoList:Array<Todo>;
   private todoService:TodoService;
-  private currentFilter='Done';
+  private currentFilter='All';
   constructor(todoService:TodoService) {
     this.todoService = todoService;
   }
@@ -69,13 +69,15 @@ export class TodoList {
     this.currentFilter=filter.name;
     this.todoList=this.queryListByFilter(filter.name);
   }
-  queryListByFilter(name:string){
-    var param={};
+  queryListByFilter(name:string):Array<Todo>{
+    var param={done:null};
 
     if(name==='Done'){
       param.done=true;
     }else if(name==='Undone'){
       param.done=false;
+    }else{
+      param=null;
     }
     return this.todoService.query(param);
   }

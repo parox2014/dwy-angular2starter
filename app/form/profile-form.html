@@ -1,0 +1,57 @@
+<div class="panel panel-default">
+
+  <div class="panel-heading">
+    <h1>Profile Form</h1>
+  </div>
+
+  <div class="panel-body">
+
+    <form (ngSubmit)="onSubmit()" novalidate #profileForm="ngForm">
+
+      <div class="input-group">
+        <span class="input-group-addon">Email</span>
+        <input type="email"
+               name="email"
+               id="email"
+               class="form-control"
+               [(ngModel)]="profile.email"
+               #email="ngForm"
+               required
+               ngControl="email">
+
+      </div>
+      <div [hidden]="email.valid||email.pristine" class="alert alert-danger"> Email is required</div>
+
+      <div class="input-group">
+        <span class="input-group-addon">NickName</span>
+        <input type="text"
+               name="nickName"
+               id="nickName"
+               class="form-control"
+               [(ngModel)]="profile.nickName"
+               #nickName="ngForm"
+               required
+               ngControl="nickName">
+      </div>
+
+      <div [hidden]="nickName.valid||nickName.pristine" class="alert alert-danger"> Email is required</div>
+
+      <div class="input-group">
+        <span class="input-group-addon">Gender</span>
+        <select type="text"
+                name="gender"
+                id="gender"
+                class="form-control"
+                [(ngModel)]="profile.gender"
+                #gender="ngForm"
+                ngControl="gender">
+          <option value="male">male</option>
+          <option value="female">female</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="!profileForm.form.valid">Submit</button>
+    </form>
+
+  </div>
+</div>

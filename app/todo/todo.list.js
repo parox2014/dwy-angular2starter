@@ -1,4 +1,4 @@
-System.register(['angular2/core', './todo.item', '../services/todoService', './todo.form', './todo.filter'], function(exports_1) {
+System.register(['angular2/core', './todo.item', '../services/TodoService', './todo.form', './todo.filter'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(['angular2/core', './todo.item', '../services/todoService', './t
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, todo_item_1, todoService_1, todo_form_1, todo_filter_1;
+    var core_1, todo_item_1, TodoService_1, todo_form_1, todo_filter_1;
     var TodoList;
     return {
         setters:[
@@ -18,8 +18,8 @@ System.register(['angular2/core', './todo.item', '../services/todoService', './t
             function (todo_item_1_1) {
                 todo_item_1 = todo_item_1_1;
             },
-            function (todoService_1_1) {
-                todoService_1 = todoService_1_1;
+            function (TodoService_1_1) {
+                TodoService_1 = TodoService_1_1;
             },
             function (todo_form_1_1) {
                 todo_form_1 = todo_form_1_1;
@@ -30,7 +30,7 @@ System.register(['angular2/core', './todo.item', '../services/todoService', './t
         execute: function() {
             TodoList = (function () {
                 function TodoList(todoService) {
-                    this.currentFilter = 'Done';
+                    this.currentFilter = 'All';
                     this.todoService = todoService;
                 }
                 TodoList.prototype.ngOnInit = function () {
@@ -58,12 +58,15 @@ System.register(['angular2/core', './todo.item', '../services/todoService', './t
                     this.todoList = this.queryListByFilter(filter.name);
                 };
                 TodoList.prototype.queryListByFilter = function (name) {
-                    var param = {};
+                    var param = { done: null };
                     if (name === 'Done') {
                         param.done = true;
                     }
                     else if (name === 'Undone') {
                         param.done = false;
+                    }
+                    else {
+                        param = null;
                     }
                     return this.todoService.query(param);
                 };
@@ -71,10 +74,10 @@ System.register(['angular2/core', './todo.item', '../services/todoService', './t
                     core_1.Component({
                         selector: 'todo-list',
                         directives: [todo_item_1.TodoItem, todo_form_1.TodoForm, todo_filter_1.TodoFilter],
-                        providers: [todoService_1.TodoService],
-                        template: "\n    <div>\n      <todo-form (formSubmit)=\"createTodo($event)\"></todo-form>\n      <div class=\"panel panel-default\">\n        <div class=\"panel-heading\" todo-filter=\"Done\" (filterChange)=\"onFilterChange($event)\"></div>\n\n        <div class=\"panel-body\">\n          <ul class=\"list-unstyled list-group\">\n            <todo-item *ngFor=\"#todo of todoList\"\n            (toggleDone)=\"onToggleDone(todo)\"\n            (remove)=\"onRemove($event)\"\n            class=\"list-group-item\" [class.list-group-item-success]=\"todo.done\"\n            [todo]=\"todo\">\n            </todo-item>\n          </ul>\n        </div>\n\n        <div class=\"panel-footer\">\n          {{todoList.length}}\n        </div>\n      </div>\n\n\n    </div>\n  "
+                        providers: [TodoService_1.TodoService],
+                        template: "\n    <div>\n      <todo-form (formSubmit)=\"createTodo($event)\"></todo-form>\n      <div class=\"panel panel-default\">\n        <div class=\"panel-heading\" todo-filter=\"All\" (filterChange)=\"onFilterChange($event)\"></div>\n\n        <div class=\"panel-body\">\n          <ul class=\"list-unstyled list-group\">\n            <todo-item *ngFor=\"#todo of todoList\"\n            (toggleDone)=\"onToggleDone(todo)\"\n            (remove)=\"onRemove($event)\"\n            class=\"list-group-item\" [class.list-group-item-success]=\"todo.done\"\n            [todo]=\"todo\">\n            </todo-item>\n          </ul>\n        </div>\n\n        <div class=\"panel-footer\">\n          {{todoList.length}}\n        </div>\n      </div>\n\n\n    </div>\n  "
                     }), 
-                    __metadata('design:paramtypes', [todoService_1.TodoService])
+                    __metadata('design:paramtypes', [TodoService_1.TodoService])
                 ], TodoList);
                 return TodoList;
             })();

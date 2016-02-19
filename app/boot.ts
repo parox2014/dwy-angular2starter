@@ -1,37 +1,31 @@
 import {bootstrap} from 'angular2/platform/browser'
-import {TodoList} from './component/todo.list';
+
 import {Inject,Component} from 'angular2/core';
 import {LocationStrategy,RouteConfig,Router,ROUTER_DIRECTIVES,ROUTER_PROVIDERS} from "angular2/router";
 import {HTTP_PROVIDERS} from "angular2/http";
-import {TodoDetail} from './component/todo.detail';
 
-@Component({
-  selector: 'angular2-form',
-  template: `
-    <h1>angular2 form</h1>
-  `
-})
-
-class Angular2Form {
-}
+import {TodoList} from './todo/todo.list';
+import {TodoDetail} from './todo/todo.detail';
+import {ProfileForm} from './form/profile.form';
 
 
 @Component({
   selector: "angular2-demo",
+  providers:[HTTP_PROVIDERS],
   directives: [ROUTER_DIRECTIVES],
   template: `
-  <nav class="navbar navbar-default">
+  <nav class="navbar">
       <div class="container-fluid">
         <div class="navbar-header">
           <div class="navbar-brand">
-            <a href="#">
+            <a href="#/">
               {{title}}
             </a>
           </div>
         </div>
 
         <ul class="nav navbar-nav">
-          <li *ngFor="#nav of navList" [class.active]="isCurrent(nav)">
+          <li *ngFor="#nav of navList">
             <a [routerLink]="[nav]">{{nav}}</a>
           </li>
         </ul>
@@ -47,7 +41,7 @@ class Angular2Form {
 @RouteConfig([
   {path: "/todo", component: TodoList, name: "Todo", useAsDefault: true},
   {path: "/todo/:id", component: TodoDetail, name: "TodoDetail"},
-  {path: "/form", component: Angular2Form, name: "Form"}
+  {path: "/profile-form", component: ProfileForm, name: "ProfileForm"}
 ])
 
 class Angular2Demo {
@@ -59,10 +53,7 @@ class Angular2Demo {
     this.title = 'Angular2 Demo';
     this.router = rt;
     this.locationStrategy=ls;
-    this.navList=['Todo','Form'];
-  }
-  isCurrent(path:String){
-    return this.locationStrategy.path()==='/'+path.toLowerCase();
+    this.navList=['Todo','ProfileForm'];
   }
 }
 

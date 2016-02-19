@@ -1,4 +1,5 @@
 import {Component,Output,EventEmitter} from 'angular2/core';
+
 interface Filter{
   name:string;
   checked:boolean
