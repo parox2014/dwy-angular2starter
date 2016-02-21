@@ -28,7 +28,7 @@ import {MyDate} from '../pipes/datePipe';
         <span>{{todo.createAt|myDate}}</span>
       </div>
 
-      <div class="col-md-2">
+      <div class="col-md-2 col-md-offset-4">
         <button class="btn btn-danger btn-xs" (click)="onRemoveBtnClick()">remove</button>
       </div>
 

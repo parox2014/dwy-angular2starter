@@ -5,9 +5,8 @@ import {LocationStrategy,RouteConfig,Router,ROUTER_DIRECTIVES,ROUTER_PROVIDERS} 
 import {HTTP_PROVIDERS} from "angular2/http";
 import {TodoService} from './services/TodoService';
 
-import {TodoList} from './todo/todo.list';
-import {TodoDetail} from './todo/todo.detail';
 import {ProfileForm} from './form/profile.form';
+import {TodoComponent} from "./todo/todo";
 
 
 @Component({
@@ -27,7 +26,7 @@ import {ProfileForm} from './form/profile.form';
 
         <ul class="nav navbar-nav">
           <li *ngFor="#nav of navList">
-            <a [routerLink]="[nav]">{{nav}}</a>
+            <a [routerLink]="nav">{{nav[0]}}</a>
           </li>
         </ul>
       </div>
@@ -40,17 +39,13 @@ import {ProfileForm} from './form/profile.form';
 })
 
 @RouteConfig([
-  {path: "/todo", component: TodoList, name: "Todo", useAsDefault: true},
-  {path: "/todo/:id", component: TodoDetail, name: "TodoDetail"},
+  {path: "/todo/...", component: TodoComponent, name: "Todo", useAsDefault: true},
   {path: "/profile-form", component: ProfileForm, name: "ProfileForm"}
 ])
 
 class Angular2Demo {
   private title='Angular2 Demo';
-  private navList=['Todo','ProfileForm'];
-  constructor(private router:Router, private locationStrategy:LocationStrategy) {
-
-  }
+  private navList=[['Todo','Todo'],['ProfileForm']];
 }
 
 bootstrap(Angular2Demo, [ROUTER_PROVIDERS, HTTP_PROVIDERS,TodoService]);

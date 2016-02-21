@@ -1,4 +1,4 @@
-System.register(['angular2/platform/browser', 'angular2/core', "angular2/router", "angular2/http", './services/TodoService', './todo/todo.list', './todo/todo.detail', './form/profile.form'], function(exports_1) {
+System.register(['angular2/platform/browser', 'angular2/core', "angular2/router", "angular2/http", './services/TodoService', './form/profile.form', "./todo/todo"], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(['angular2/platform/browser', 'angular2/core', "angular2/router"
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var browser_1, core_1, router_1, http_1, TodoService_1, todo_list_1, todo_detail_1, profile_form_1;
+    var browser_1, core_1, router_1, http_1, TodoService_1, profile_form_1, todo_1;
     var Angular2Demo;
     return {
         setters:[
@@ -27,36 +27,30 @@ System.register(['angular2/platform/browser', 'angular2/core', "angular2/router"
             function (TodoService_1_1) {
                 TodoService_1 = TodoService_1_1;
             },
-            function (todo_list_1_1) {
-                todo_list_1 = todo_list_1_1;
-            },
-            function (todo_detail_1_1) {
-                todo_detail_1 = todo_detail_1_1;
-            },
             function (profile_form_1_1) {
                 profile_form_1 = profile_form_1_1;
+            },
+            function (todo_1_1) {
+                todo_1 = todo_1_1;
             }],
         execute: function() {
             Angular2Demo = (function () {
-                function Angular2Demo(router, locationStrategy) {
-                    this.router = router;
-                    this.locationStrategy = locationStrategy;
+                function Angular2Demo() {
                     this.title = 'Angular2 Demo';
-                    this.navList = ['Todo', 'ProfileForm'];
+                    this.navList = [['Todo', 'Todo'], ['ProfileForm']];
                 }
                 Angular2Demo = __decorate([
                     core_1.Component({
                         selector: "angular2-demo",
                         providers: [http_1.HTTP_PROVIDERS],
                         directives: [router_1.ROUTER_DIRECTIVES],
-                        template: "\n  <nav class=\"navbar\">\n      <div class=\"container-fluid\">\n        <div class=\"navbar-header\">\n          <div class=\"navbar-brand\">\n            <a href=\"#/\">\n              {{title}}\n            </a>\n          </div>\n        </div>\n\n        <ul class=\"nav navbar-nav\">\n          <li *ngFor=\"#nav of navList\">\n            <a [routerLink]=\"[nav]\">{{nav}}</a>\n          </li>\n        </ul>\n      </div>\n    </nav>\n  <div class=\"container\">\n    <!--\u58F0\u660E\u8DEF\u7531\u51FA\u53E3-->\n    <router-outlet></router-outlet>\n  </div>\n\t"
+                        template: "\n  <nav class=\"navbar\">\n      <div class=\"container-fluid\">\n        <div class=\"navbar-header\">\n          <div class=\"navbar-brand\">\n            <a href=\"#/\">\n              {{title}}\n            </a>\n          </div>\n        </div>\n\n        <ul class=\"nav navbar-nav\">\n          <li *ngFor=\"#nav of navList\">\n            <a [routerLink]=\"nav\">{{nav[0]}}</a>\n          </li>\n        </ul>\n      </div>\n    </nav>\n  <div class=\"container\">\n    <!--\u58F0\u660E\u8DEF\u7531\u51FA\u53E3-->\n    <router-outlet></router-outlet>\n  </div>\n\t"
                     }),
                     router_1.RouteConfig([
-                        { path: "/todo", component: todo_list_1.TodoList, name: "Todo", useAsDefault: true },
-                        { path: "/todo/:id", component: todo_detail_1.TodoDetail, name: "TodoDetail" },
+                        { path: "/todo/...", component: todo_1.TodoComponent, name: "Todo", useAsDefault: true },
                         { path: "/profile-form", component: profile_form_1.ProfileForm, name: "ProfileForm" }
                     ]), 
-                    __metadata('design:paramtypes', [router_1.Router, router_1.LocationStrategy])
+                    __metadata('design:paramtypes', [])
                 ], Angular2Demo);
                 return Angular2Demo;
             })();

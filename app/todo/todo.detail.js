@@ -35,13 +35,18 @@ System.register(['angular2/core', 'angular2/router', '../services/TodoService', 
                     var id = Number(this.routeParams.get('id'));
                     this.todo = this.todoService.query({ ID: id })[0];
                 };
+                TodoDetail.prototype.onDoneBtnClick = function () {
+                    var todo = this.todo;
+                    todo.done = !todo.done;
+                    this.todoService.toggleDone(todo);
+                };
                 TodoDetail = __decorate([
                     core_1.Component({
                         selector: 'todo-detail',
                         providers: [TodoService_1.TodoService],
                         pipes: [datePipe_1.MyDate],
                         directives: [router_1.ROUTER_DIRECTIVES],
-                        template: "\n    <div class=\"panel panel-default\" [class.panel-success]=\"todo.done\">\n      <div class=\"panel-heading clearfix\">\n        <div class=\"col-md-4\">\n          <h4>Todo Detail</h4>\n        </div>\n\n        <div class=\"col-md-8\">\n          <a class=\"btn btn-success\" [routerLink]=\"['Todo']\">Return to todo list</a>\n        </div>\n      </div>\n      <div class=\"panel-body\">\n        <ul class=\"list-group\">\n          <li class=\"list-group-item list-group-item-text\">\n            <span>Todo Name:</span>\n            <strong>{{todo.name}}</strong>\n          </li>\n          <li class=\"list-group-item list-group-item-text\">\n            <span>Create At:</span>\n            <strong>{{todo.createAt|myDate}}</strong>\n          </li>\n          <li class=\"list-group-item list-group-item-text\">\n            <span>Update At:</span>\n            <strong>{{todo.updateAt|myDate}}</strong>\n          </li>\n        </ul>\n      </div>\n    </div>\n    "
+                        template: "\n\n      <h1>{{todo.name}}</h1>\n      <ul class=\"list-group\">\n      <li class=\"list-group-item list-group-item-text\">\n        <span>Create At:</span>\n        <strong>{{todo.createAt|myDate}}</strong>\n      </li>\n      <li class=\"list-group-item list-group-item-text\">\n        <span>Update At:</span>\n        <strong>{{todo.updateAt|myDate}}</strong>\n      </li>\n      </ul>\n\n      <div>\n        <button class=\"btn btn-default btn-block\"\n          (click)=\"onDoneBtnClick()\"\n          [class.btn-success]=\"todo.done\">\n          {{todo.done?'Restart':'Done'}}\n         </button>\n      </div>\n\n    "
                     }), 
                     __metadata('design:paramtypes', [router_1.Router, router_1.RouteParams, TodoService_1.TodoService])
                 ], TodoDetail);
