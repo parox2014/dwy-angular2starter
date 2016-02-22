@@ -23,19 +23,27 @@ System.register(['angular2/core', 'angular2/common', '../directives/directives']
             }],
         execute: function() {
             ProfileForm = (function () {
-                function ProfileForm() {
-                    this.profile = { gender: 'male' };
+                function ProfileForm(fb) {
+                    this.profile = {};
+                    var form = this.profileForm = fb.group({
+                        email: [''],
+                        nickName: [''],
+                        gender: ['female']
+                    });
+                    this.emailCtrl = form.controls['email'];
+                    this.nickNameCtrl = form.controls['nickName'];
+                    this.genderCtrl = form.controls['gender'];
                 }
                 ProfileForm.prototype.onSubmit = function () {
-                    console.log(this.profile);
+                    console.log(this.profileForm.value);
                 };
                 ProfileForm = __decorate([
                     core_1.Component({
                         selector: 'profile-form',
-                        directives: [common_1.FORM_DIRECTIVES, directives_1.EmailValidatorDirective],
+                        directives: [common_1.FORM_DIRECTIVES, common_1.CORE_DIRECTIVES, directives_1.EmailRequiredDirective],
                         templateUrl: 'app/form/profile-form.html'
                     }), 
-                    __metadata('design:paramtypes', [])
+                    __metadata('design:paramtypes', [common_1.FormBuilder])
                 ], ProfileForm);
                 return ProfileForm;
             })();

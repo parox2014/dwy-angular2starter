@@ -7,7 +7,12 @@
 
   <style type="text/css">
 
-    .navbar .navbar-nav>li>.router-link-active{
+    .navbar-diy{
+      background-color: #f8f8f8;
+      border-color: #e7e7e7;
+    }
+
+    .navbar-diy .navbar-nav>li>.router-link-active{
       color: #fff;
       background-color: #2aabd2;
     }
@@ -16,6 +21,16 @@
       margin-bottom: 20px;;
     }
 
+
+    .ng-invalid{
+      border:1px solid #ff0000;
+      box-shadow: inset 0 1px 1px rgba(255,0,0,0.075);
+    }
+
+    .ng-pristine.ng-invalid{
+      border:1px solid #ccc;
+      box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    }
   </style>
 
   <script src="./lib/localstorageDB.js"></script>
@@ -35,17 +50,6 @@
 
   <base href="/">
   <!-- 2. Configure SystemJS -->
-
-  <script>
-    var starterDB = new localStorageDB("library", localStorage);
-
-    if(starterDB.isNew()){
-      starterDB.createTable('todos',['name','done','createAt','updateAt']);
-
-      starterDB.commit();
-    }
-
-  </script>
 
   <script>
     System.config({

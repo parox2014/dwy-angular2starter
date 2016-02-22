@@ -1,22 +1,34 @@
 import {Component} from 'angular2/core';
-import {FORM_DIRECTIVES} from 'angular2/common';
-import {EmailValidatorDirective} from '../directives/directives';
+import {FORM_DIRECTIVES,CORE_DIRECTIVES,FormBuilder,AbstractControl,Control,ControlGroup} from 'angular2/common';
+import {EmailRequiredDirective} from '../directives/directives';
 
 import {Profile} from './profile.interface';
 
 @Component({
   selector:'profile-form',
-  directives:[FORM_DIRECTIVES,EmailValidatorDirective],
+  directives:[FORM_DIRECTIVES,CORE_DIRECTIVES,EmailRequiredDirective],
   templateUrl:'app/form/profile-form.html'
 })
 
 export class ProfileForm{
-  profile:Profile={gender:'male'};
-  constructor(){
+  profile:Profile={};
+  profileForm:ControlGroup;
+  emailCtrl:AbstractControl;
+  nickNameCtrl:AbstractControl;
+  genderCtrl:AbstractControl;
+  constructor(fb:FormBuilder){
+    let form=this.profileForm=fb.group({
+      email:[''],
+      nickName:[''],
+      gender:['female']
+    });
 
+    this.emailCtrl=form.controls['email'];
+    this.nickNameCtrl=form.controls['nickName'];
+    this.genderCtrl=form.controls['gender'];
   }
 
   onSubmit(){
-    console.log(this.profile);
+    console.log(this.profileForm.value);
   }
 }

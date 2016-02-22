@@ -77,7 +77,7 @@ System.register(['angular2/core', './todo.item', '../services/TodoService', './t
                     core_1.Component({
                         selector: 'todo-list',
                         directives: [todo_item_1.TodoItem, todo_form_1.TodoForm, todo_filter_1.TodoFilter],
-                        template: "\n  <todo-form (formSubmit)=\"createTodo($event)\"></todo-form>\n  <div style=\"margin-bottom: 20px;\" todo-filter=\"All\" (filterChange)=\"onFilterChange($event)\"></div>\n\n  <hr>\n  <ul *ngIf=\"todoList.length>0\" class=\"list-unstyled list-group\">\n    <todo-item *ngFor=\"#todo of todoList\"\n    (toggleDone)=\"onToggleDone(todo)\"\n    (remove)=\"onRemove($event)\"\n    class=\"list-group-item\" [ngClass]=\"{'list-group-item-success':todo.done}\"\n    [todo]=\"todo\">\n    </todo-item>\n  </ul>\n  <h4 class=\"text-center\" *ngIf=\"todoList.length===0\">Have not todo,plesae create todo first</h4>\n  "
+                        template: "\n  <todo-form (formSubmit)=\"createTodo($event)\"></todo-form>\n  <div style=\"margin-bottom: 20px;\" todo-filter=\"All\" (filterChange)=\"onFilterChange($event)\"></div>\n\n  <hr>\n  <ul *ngIf=\"todoList.length>0\" class=\"list-unstyled list-group\">\n    <todo-item *ngFor=\"#todo of todoList\"\n    (toggleDone)=\"onToggleDone($event)\"\n    (remove)=\"onRemove($event)\"\n    class=\"list-group-item\" [ngClass]=\"{'list-group-item-success':todo.done}\"\n    [todo]=\"todo\">\n    </todo-item>\n  </ul>\n  <h4 class=\"text-center\" *ngIf=\"todoList.length===0\">Have not todo,plesae create todo first</h4>\n  "
                     }), 
                     __metadata('design:paramtypes', [TodoService_1.TodoService, core_1.ElementRef])
                 ], TodoList);

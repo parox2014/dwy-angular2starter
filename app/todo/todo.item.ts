@@ -1,12 +1,9 @@
 import {Component,Output,Input,EventEmitter} from 'angular2/core';
 import {Router,ROUTER_DIRECTIVES} from 'angular2/router';
 import {Todo} from '../interfaces/todo';
-import {MyDate} from '../pipes/datePipe';
 
 @Component({
   selector:'todo-item',
-  //inputs:['todo'],
-  pipes:[MyDate],
   directives: [ROUTER_DIRECTIVES],
   template:`
     <li [id]="todo.ID" class="clearfix">

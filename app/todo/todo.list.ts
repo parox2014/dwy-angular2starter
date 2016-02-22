@@ -16,7 +16,7 @@ import {CanDeactivate} from 'angular2/router';
   <hr>
   <ul *ngIf="todoList.length>0" class="list-unstyled list-group">
     <todo-item *ngFor="#todo of todoList"
-    (toggleDone)="onToggleDone(todo)"
+    (toggleDone)="onToggleDone($event)"
     (remove)="onRemove($event)"
     class="list-group-item" [ngClass]="{'list-group-item-success':todo.done}"
     [todo]="todo">

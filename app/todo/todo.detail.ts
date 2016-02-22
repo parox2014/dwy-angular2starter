@@ -2,12 +2,10 @@ import {Component} from 'angular2/core';
 import {Router,RouteParams,ROUTER_DIRECTIVES} from 'angular2/router';
 import {TodoService} from '../services/TodoService';
 import {Todo} from '../interfaces/todo';
-import {MyDate} from '../pipes/datePipe';
 
 @Component({
   selector: 'todo-detail',
   providers: [TodoService],
-  pipes: [MyDate],
   directives:[ROUTER_DIRECTIVES],
   template: `
 
@@ -43,7 +41,7 @@ export class TodoDetail {
 
   ngOnInit() {
     var id:number = Number(this.routeParams.get('id'));
-    this.todo = this.todoService.query({ID: id})[0];
+    this.todo = this.todoService.getById(id);
   }
   onDoneBtnClick(){
     let todo:Todo=this.todo;

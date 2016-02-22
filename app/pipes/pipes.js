@@ -9,7 +9,7 @@ System.register(['angular2/core'], function(exports_1) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1;
-    var MyDate;
+    var MyDate, CUSTOM_PIPES;
     return {
         setters:[
             function (core_1_1) {
@@ -20,7 +20,7 @@ System.register(['angular2/core'], function(exports_1) {
                 function MyDate() {
                 }
                 MyDate.prototype.transform = function (date, args) {
-                    return moment(date).format(args[0] || 'YYYY-MM-DD HH:mm');
+                    return window['moment'](date).format(args[0] || 'YYYY-MM-DD HH:mm');
                 };
                 MyDate = __decorate([
                     core_1.Pipe({ name: 'myDate' }), 
@@ -29,7 +29,8 @@ System.register(['angular2/core'], function(exports_1) {
                 return MyDate;
             })();
             exports_1("MyDate", MyDate);
+            exports_1("CUSTOM_PIPES", CUSTOM_PIPES = [MyDate]);
         }
     }
 });
-//# sourceMappingURL=datePipe.js.map
+//# sourceMappingURL=pipes.js.map

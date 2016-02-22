@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', '../services/TodoService', '../pipes/datePipe'], function(exports_1) {
+System.register(['angular2/core', 'angular2/router', '../services/TodoService'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(['angular2/core', 'angular2/router', '../services/TodoService', 
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, TodoService_1, datePipe_1;
+    var core_1, router_1, TodoService_1;
     var TodoDetail;
     return {
         setters:[
@@ -20,9 +20,6 @@ System.register(['angular2/core', 'angular2/router', '../services/TodoService', 
             },
             function (TodoService_1_1) {
                 TodoService_1 = TodoService_1_1;
-            },
-            function (datePipe_1_1) {
-                datePipe_1 = datePipe_1_1;
             }],
         execute: function() {
             TodoDetail = (function () {
@@ -33,7 +30,7 @@ System.register(['angular2/core', 'angular2/router', '../services/TodoService', 
                 }
                 TodoDetail.prototype.ngOnInit = function () {
                     var id = Number(this.routeParams.get('id'));
-                    this.todo = this.todoService.query({ ID: id })[0];
+                    this.todo = this.todoService.getById(id);
                 };
                 TodoDetail.prototype.onDoneBtnClick = function () {
                     var todo = this.todo;
@@ -44,7 +41,6 @@ System.register(['angular2/core', 'angular2/router', '../services/TodoService', 
                     core_1.Component({
                         selector: 'todo-detail',
                         providers: [TodoService_1.TodoService],
-                        pipes: [datePipe_1.MyDate],
                         directives: [router_1.ROUTER_DIRECTIVES],
                         template: "\n\n      <h1>{{todo.name}}</h1>\n      <ul class=\"list-group\">\n      <li class=\"list-group-item list-group-item-text\">\n        <span>Create At:</span>\n        <strong>{{todo.createAt|myDate}}</strong>\n      </li>\n      <li class=\"list-group-item list-group-item-text\">\n        <span>Update At:</span>\n        <strong>{{todo.updateAt|myDate}}</strong>\n      </li>\n      </ul>\n\n      <div>\n        <button class=\"btn btn-default btn-block\"\n          (click)=\"onDoneBtnClick()\"\n          [class.btn-success]=\"todo.done\">\n          {{todo.done?'Restart':'Done'}}\n         </button>\n      </div>\n\n    "
                     }), 

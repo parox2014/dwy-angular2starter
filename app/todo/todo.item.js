@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', '../pipes/datePipe'], function(exports_1) {
+System.register(['angular2/core', 'angular2/router'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(['angular2/core', 'angular2/router', '../pipes/datePipe'], funct
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, datePipe_1;
+    var core_1, router_1;
     var TodoItem;
     return {
         setters:[
@@ -17,9 +17,6 @@ System.register(['angular2/core', 'angular2/router', '../pipes/datePipe'], funct
             },
             function (router_1_1) {
                 router_1 = router_1_1;
-            },
-            function (datePipe_1_1) {
-                datePipe_1 = datePipe_1_1;
             }],
         execute: function() {
             TodoItem = (function () {
@@ -49,8 +46,6 @@ System.register(['angular2/core', 'angular2/router', '../pipes/datePipe'], funct
                 TodoItem = __decorate([
                     core_1.Component({
                         selector: 'todo-item',
-                        //inputs:['todo'],
-                        pipes: [datePipe_1.MyDate],
                         directives: [router_1.ROUTER_DIRECTIVES],
                         template: "\n    <li [id]=\"todo.ID\" class=\"clearfix\">\n      <div class=\"col-md-1\">\n        <input type=\"checkbox\" [(ngModel)]=\"todo.done\" (change)=\"onChange($event)\">\n      </div>\n\n      <div class=\"col-md-3\">\n        <!--<a href=\"javascript:;\" (click)=\"onTodoNameClick()\">-->\n          <!--<strong>{{todo.name}}</strong>-->\n        <!--</a>-->\n\n        <a [routerLink]=\"['TodoDetail',{id:todo.ID}]\">\n          <strong>{{todo.name}}</strong>\n        </a>\n      </div>\n\n      <div class=\"col-md-2\">\n        <span>{{todo.createAt|myDate}}</span>\n      </div>\n\n      <div class=\"col-md-2 col-md-offset-4\">\n        <button class=\"btn btn-danger btn-xs\" (click)=\"onRemoveBtnClick()\">remove</button>\n      </div>\n\n    </li>\n  "
                     }), 

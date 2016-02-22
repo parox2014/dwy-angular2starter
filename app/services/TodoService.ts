@@ -1,17 +1,18 @@
-import {Http,URLSearchParams,BaseRequestOptions,RequestMethod,RequestOptionsArgs} from 'angular2/http';
+import {Http,URLSearchParams,RequestOptionsArgs,Headers,Response,RequestOptions} from 'angular2/http';
 import {Todo} from '../interfaces/todo';
+import {LocalDataBase} from './DataBaseService';
 import {Injectable,Injector} from 'angular2/core';
 
-var id=0;
+var id:number = 0;
 
 @Injectable()
 
 export class TodoService {
-  private http:Http;
   id:number;
-  constructor(http:Http) {
-    this.http = http;
-    this.id=id+1;
+
+  constructor(private http:Http,private db:LocalDataBase) {
+
+    this.id = id + 1;
   }
 
   /**
@@ -23,15 +24,18 @@ export class TodoService {
    */
   query(query?:Object, limit?:number, sort?:Array<string>):Array<Todo> {
     limit = limit || 10;
-    sort = sort || ['createAt','DESC'];
+    sort = sort || ['createAt', 'DESC'];
 
-    return starterDB.queryAll("todos", {
+
+    return this.db.queryAll("todos", {
       query: query,
       limit: limit,
       sort: [sort]
     });
   }
-
+  getById(id):Todo{
+    return this.query({ID:id})[0];
+  }
   /**
    * create todo
    * @param todo
@@ -41,9 +45,9 @@ export class TodoService {
     todo.createAt = new Date();
     todo.updateAt = new Date();
 
-    starterDB.insert('todos', todo);
+    this.db.insert('todos', todo);
 
-    starterDB.commit();
+    this.db.commit();
   }
 
   /**
@@ -51,13 +55,13 @@ export class TodoService {
    * @param id
    */
   removeById(id:number):void {
-    starterDB.deleteRows('todos',{ID:id});
-    starterDB.commit();
+    this.db.deleteRows('todos', {ID: id});
+    this.db.commit();
   }
 
   updateById(id:number, update:Object):void {
-    starterDB.insertOrUpdate("todos", {ID: id}, update);
-    starterDB.commit();
+    this.db.insertOrUpdate("todos", {ID: id}, update);
+    this.db.commit();
   }
 
   toggleDone(todo:Todo):void {
