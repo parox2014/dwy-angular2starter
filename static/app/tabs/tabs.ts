@@ -3,6 +3,7 @@ import {BrowserDomAdapter} from 'angular2/platform/browser';
 import {CORE_DIRECTIVES,COMMON_DIRECTIVES} from 'angular2/common';
 import {ProfileForm} from '../form/profile.form';
 
+
 interface Tab {
   name:string;
   isActive:boolean;
@@ -34,6 +35,7 @@ class TabHeader {
   @Output() itemClick = new EventEmitter();
 
   constructor(private eleRef:ElementRef, private dom:BrowserDomAdapter) {
+
   }
   ngOnInit(){
     let el=this.eleRef.nativeElement;
