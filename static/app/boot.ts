@@ -1,6 +1,6 @@
-import {bootstrap} from 'angular2/platform/browser'
+import {bootstrap,BrowserDomAdapter} from 'angular2/platform/browser'
 
-import {Inject,Component,provide,PLATFORM_PIPES,ContentChild} from 'angular2/core';
+import {Inject,Component,provide,PLATFORM_PIPES,ContentChild,enableProdMode} from 'angular2/core';
 import {NG_VALIDATORS} from 'angular2/common';
 import {LocationStrategy,RouteConfig,Router,ROUTER_DIRECTIVES,ROUTER_PROVIDERS} from "angular2/router";
 import {HTTP_PROVIDERS,RequestOptions,BaseRequestOptions,Headers} from "angular2/http";
@@ -59,10 +59,13 @@ class MyRequestOptions extends BaseRequestOptions{
   headers:Headers=new Headers({'X-Request-With':'XMLHttpRequest'});
 }
 
+enableProdMode();
+
 bootstrap(Angular2Demo, [ROUTER_PROVIDERS,
   HTTP_PROVIDERS,
   LocalDataBase,
   TodoService,
+  BrowserDomAdapter,
   provide(RequestOptions,{useClass:MyRequestOptions}),
   provide(PLATFORM_PIPES,{useValue:CUSTOM_PIPES,multi:true})
 ]);

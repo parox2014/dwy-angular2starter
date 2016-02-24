@@ -77,10 +77,12 @@ System.register(['angular2/platform/browser', 'angular2/core', "angular2/router"
                 }
                 return MyRequestOptions;
             })(http_1.BaseRequestOptions);
+            core_1.enableProdMode();
             browser_1.bootstrap(Angular2Demo, [router_1.ROUTER_PROVIDERS,
                 http_1.HTTP_PROVIDERS,
                 DataBaseService_1.LocalDataBase,
                 TodoService_1.TodoService,
+                browser_1.BrowserDomAdapter,
                 core_1.provide(http_1.RequestOptions, { useClass: MyRequestOptions }),
                 core_1.provide(core_1.PLATFORM_PIPES, { useValue: pipes_1.CUSTOM_PIPES, multi: true })
             ]);
