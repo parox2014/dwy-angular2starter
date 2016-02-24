@@ -1,33 +1,26 @@
 {
-  "name": "angular2-starter",
-  "version": "1.0.0",
-  "author": {
-    "name": "Wenyan Du",
-    "email": "parox2014@gmail.com"
-  },
-  "contributors": [],
-  "scripts": {
-    "tsc": "tsc",
-    "tsc:w": "tsc -w",
-    "lite": "lite-server",
-    "start": "concurrent \"npm run tsc:w\" \"npm run lite\" "
-  },
+  "name": "angular2starter",
+  "version": "0.0.1",
+  "author":"Wenyan Du",
   "repository": "git@github.com:WilliamDu1981/dwy-angular2starter.git",
   "license": "ISC",
   "dependencies": {
-    "angular2": "2.0.0-beta.0",
-    "bootstrap": "^3.3.6",
-    "es6-promise": "^3.0.2",
-    "es6-shim": "^0.33.3",
-    "moment": "^2.11.2",
-    "reflect-metadata": "0.1.2",
-    "rxjs": "5.0.0-beta.0",
-    "systemjs": "0.19.6",
-    "zone.js": "0.5.10"
-  },
-  "devDependencies": {
-    "concurrently": "^1.0.0",
-    "lite-server": "^1.3.1",
-    "typescript": "^1.7.3"
+    "express": "^4.13.4",
+    "body-parser": "^1.13.3",
+    "connect-mongo": "^0.8.2",
+    "cookie-parser": "^1.3.5",
+    "ejs": "^2.3.3",
+    "eventproxy": "^0.3.4",
+    "express-session": "^1.11.3",
+    "express-validator": "^2.17.1",
+    "favicon": "0.0.2",
+    "log4js": "^0.6.28",
+    "moment": "*",
+    "mongoose": "^4.1.5",
+    "multer": "^1.1.0",
+    "nodemailer": "^1.5.0",
+    "redis": "^2.2.1",
+    "serve-favicon": "^2.3.0",
+    "underscore": "^1.8.3"
   }
 }
