@@ -1,4 +1,9 @@
-System.register(['angular2/core', 'angular2/platform/browser', 'angular2/common', '../form/profile.form'], function(exports_1) {
+System.register(['angular2/core', 'angular2/common', '../form/profile.form', '../AnimationComponent'], function(exports_1) {
+    var __extends = (this && this.__extends) || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,37 +13,37 @@ System.register(['angular2/core', 'angular2/platform/browser', 'angular2/common'
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, browser_1, common_1, profile_form_1;
+    var core_1, common_1, profile_form_1, AnimationComponent_1;
     var TabHeader, TabPane, Tabs, TabComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
-            function (browser_1_1) {
-                browser_1 = browser_1_1;
-            },
             function (common_1_1) {
                 common_1 = common_1_1;
             },
             function (profile_form_1_1) {
                 profile_form_1 = profile_form_1_1;
+            },
+            function (AnimationComponent_1_1) {
+                AnimationComponent_1 = AnimationComponent_1_1;
             }],
         execute: function() {
             TabHeader = (function () {
-                function TabHeader(eleRef, dom) {
+                function TabHeader(eleRef, renderer) {
                     this.eleRef = eleRef;
-                    this.dom = dom;
+                    this.renderer = renderer;
                     this.tabList = [];
                     this.itemClass = '';
                     this.align = '';
                     this.itemClick = new core_1.EventEmitter();
                 }
                 TabHeader.prototype.ngOnInit = function () {
-                    var el = this.eleRef.nativeElement;
-                    this.dom.setStyle(el, 'display', 'block');
+                    var el = this.eleRef;
+                    this.renderer.setElementStyle(el, 'display', 'block');
                     if (this.align) {
-                        this.dom.addClass(el, 'nav-' + this.align);
+                        this.renderer.setElementClass(el, 'nav-' + this.align, true);
                     }
                 };
                 TabHeader.prototype.onTabItemClick = function (tab) {
@@ -76,26 +81,27 @@ System.register(['angular2/core', 'angular2/platform/browser', 'angular2/common'
                         },
                         template: "\n    <li role=\"presentation\"\n      *ngFor=\"#tab of tabList\"\n      [class]=\"itemClass?itemClass:''\"\n       (click)=\"onTabItemClick(tab)\"\n      [class.active]=\"tab.isActive\">\n      <a href=\"javascript:;\" role=\"tab\">{{tab.name}}</a>\n    </li>\n  "
                     }), 
-                    __metadata('design:paramtypes', [core_1.ElementRef, browser_1.BrowserDomAdapter])
+                    __metadata('design:paramtypes', [core_1.ElementRef, core_1.Renderer])
                 ], TabHeader);
                 return TabHeader;
             })();
             TabPane = (function () {
-                function TabPane(elementRef, browserDom) {
-                    this.elementRef = elementRef;
-                    this.browserDom = browserDom;
-                    this.nativeElement = elementRef.nativeElement;
+                function TabPane(elRef, renderer) {
+                    this.elRef = elRef;
+                    this.renderer = renderer;
                 }
                 TabPane.prototype.show = function () {
                     var _this = this;
-                    this.browserDom.addClass(this.nativeElement, 'active');
+                    var el = this.elRef;
+                    this.renderer.setElementClass(el, 'active', true);
                     setTimeout(function () {
-                        _this.browserDom.addClass(_this.nativeElement, 'in');
+                        _this.renderer.setElementClass(el, 'in', true);
                     }, 100);
                 };
                 TabPane.prototype.hide = function () {
-                    this.browserDom.removeClass(this.nativeElement, 'in');
-                    this.browserDom.removeClass(this.nativeElement, 'active');
+                    var el = this.elRef;
+                    this.renderer.setElementClass(el, 'in', false);
+                    this.renderer.setElementClass(el, 'active', false);
                 };
                 TabPane = __decorate([
                     core_1.Component({
@@ -106,7 +112,7 @@ System.register(['angular2/core', 'angular2/platform/browser', 'angular2/common'
                         },
                         template: "\n    <ng-content></ng-content>\n  "
                     }), 
-                    __metadata('design:paramtypes', [core_1.ElementRef, browser_1.BrowserDomAdapter])
+                    __metadata('design:paramtypes', [core_1.ElementRef, core_1.Renderer])
                 ], TabPane);
                 return TabPane;
             })();
@@ -176,8 +182,12 @@ System.register(['angular2/core', 'angular2/platform/browser', 'angular2/common'
                 return Tabs;
             })();
             exports_1("Tabs", Tabs);
-            TabComponent = (function () {
-                function TabComponent() {
+            TabComponent = (function (_super) {
+                __extends(TabComponent, _super);
+                function TabComponent(elRef, renderer) {
+                    _super.call(this, elRef, renderer);
+                    this.elRef = elRef;
+                    this.renderer = renderer;
                     this.tabs = [
                         { name: 'profile', isActive: true },
                         { name: 'todos', isActive: false },
@@ -190,6 +200,8 @@ System.register(['angular2/core', 'angular2/platform/browser', 'angular2/common'
                         { name: 'tab3', isActive: false },
                         { name: 'tab4', isActive: false }
                     ];
+                    this.animation = 'slide';
+                    this.direction = 'leftToRight';
                 }
                 TabComponent.prototype.onTabActive = function (tab) {
                     this.currentTab = tab;
@@ -199,12 +211,15 @@ System.register(['angular2/core', 'angular2/platform/browser', 'angular2/common'
                     core_1.Component({
                         selector: 'tab-comp',
                         directives: [Tabs, TabPane, profile_form_1.ProfileForm, common_1.CORE_DIRECTIVES],
+                        host: {
+                            'style': 'display:block'
+                        },
                         template: "\n    <div class=\"well well-lg\">current tab is:{{currentTab|json}}</div>\n    <br>\n    <tabs [tabList]=\"tabs\" [tabAlign]=\"'justified'\" (tabActive)=\"onTabActive($event)\">\n\n      <tab-pane>\n        <profile-form></profile-form>\n      </tab-pane>\n      <tab-pane>\n        <h1>Todo</h1>\n      </tab-pane>\n      <tab-pane>\n        <h1>message</h1>\n      </tab-pane>\n      <tab-pane>\n        <h1>settings</h1>\n      </tab-pane>\n    </tabs>\n\n    <tabs [tabList]=\"secondTabs\" (tabActive)=\"onTabActive($event)\">\n\n      <tab-pane *ngFor=\"#tab of secondTabs\">\n        <h1>{{tab.name}}</h1>\n      </tab-pane>\n\n    </tabs>\n  "
                     }), 
-                    __metadata('design:paramtypes', [])
+                    __metadata('design:paramtypes', [core_1.ElementRef, core_1.Renderer])
                 ], TabComponent);
                 return TabComponent;
-            })();
+            })(AnimationComponent_1.AnimationComponent);
             exports_1("TabComponent", TabComponent);
         }
     }

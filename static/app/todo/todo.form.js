@@ -1,4 +1,4 @@
-System.register(['angular2/core', "angular2/common"], function(exports_1) {
+System.register(['angular2/core', "angular2/common", '../directives/directives'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,8 +8,8 @@ System.register(['angular2/core', "angular2/common"], function(exports_1) {
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, common_1;
-    var TodoForm;
+    var core_1, common_1, directives_1;
+    var TodoModel, TodoForm;
     return {
         setters:[
             function (core_1_1) {
@@ -17,18 +17,31 @@ System.register(['angular2/core', "angular2/common"], function(exports_1) {
             },
             function (common_1_1) {
                 common_1 = common_1_1;
+            },
+            function (directives_1_1) {
+                directives_1 = directives_1_1;
             }],
         execute: function() {
+            TodoModel = (function () {
+                function TodoModel(todo) {
+                    this.done = false;
+                    Object.assign(this, todo);
+                }
+                return TodoModel;
+            })();
             TodoForm = (function () {
                 function TodoForm() {
                     this.formSubmit = new core_1.EventEmitter();
+                    this.formModel = new common_1.ControlGroup({
+                        name: new common_1.Control('example')
+                    });
                 }
-                TodoForm.prototype.onFormSubmit = function (e, param) {
-                    e.preventDefault();
+                TodoForm.prototype.onFormSubmit = function (e) {
                     e.target.reset();
-                    var todo = Object.assign({
-                        done: false
-                    }, param);
+                    if (!this.formModel.value.name) {
+                        return;
+                    }
+                    var todo = new TodoModel(this.formModel.value);
                     this.formSubmit.emit(todo);
                 };
                 __decorate([
@@ -38,8 +51,8 @@ System.register(['angular2/core', "angular2/common"], function(exports_1) {
                 TodoForm = __decorate([
                     core_1.Component({
                         selector: 'todo-form',
-                        directives: [common_1.CORE_DIRECTIVES, common_1.FORM_DIRECTIVES],
-                        template: "\n    <form #f=\"ngForm\" (submit)=\"onFormSubmit($event,f.value)\">\n      <div class=\"form-group\">\n        <input class=\"form-control\" ngControl=\"name\" autofocus>\n      </div>\n    <form>\n  "
+                        directives: [common_1.CORE_DIRECTIVES, common_1.FORM_DIRECTIVES, directives_1.AutoFocus, directives_1.AutoSelect],
+                        template: "\n    <form [ngFormModel]=\"formModel\" (submit)=\"onFormSubmit($event)\" novalidate>\n      <div class=\"input-group\">\n        <input type=\"text\" required class=\"form-control\" ngControl=\"name\" auto-focus auto-select>\n        <span class=\"input-group-btn\">\n         <button class=\"btn btn-success\" type=\"submit\" [disabled]=\"!formModel.valid\">Create</button>\n        </span>\n      </div>\n      <div class=\"alert alert-danger\" *ngIf=\"formModel.controls['name'].hasError('required')\">\n        Todo name required\n      </div>\n    <form>\n  "
                     }), 
                     __metadata('design:paramtypes', [])
                 ], TodoForm);

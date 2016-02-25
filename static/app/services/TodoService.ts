@@ -35,10 +35,8 @@ export class TodoService {
 
     var stream:Subject<any> = new Subject<any>();
 
-    let list:Array<Todo> = this.db.queryAll("todos", option);
-
     setTimeout(()=> {
-      stream.next(list);
+      stream.next(this.db.queryAll("todos", option));
     }, 100);
 
     return stream;

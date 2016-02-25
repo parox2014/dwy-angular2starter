@@ -1,13 +1,17 @@
-import {Component,Output,Input,EventEmitter} from 'angular2/core';
+import {Component,Output,Input,EventEmitter,ElementRef,Renderer} from 'angular2/core';
 import {Router,ROUTER_DIRECTIVES} from 'angular2/router';
 import {Todo} from '../interfaces/todo';
+import {AnimationComponent} from '../AnimationComponent';
 
 @Component({
   selector:'todo-item',
   directives: [ROUTER_DIRECTIVES],
+  host:{
+    'class':'list-group-item clearfix',
+    '[id]':'todo.ID'
+  },
   template:`
-    <li [id]="todo.ID" class="clearfix">
-      <div class="col-md-1">
+    <div class="col-md-1">
         <input type="checkbox" [(ngModel)]="todo.done" (change)="onChange($event)">
       </div>
 
@@ -24,18 +28,22 @@ import {Todo} from '../interfaces/todo';
       <div class="col-md-2 col-md-offset-4">
         <button class="btn btn-danger btn-xs" (click)="onRemoveBtnClick()">remove</button>
       </div>
-
-    </li>
   `
 })
 
-export class TodoItem{
+export class TodoItem extends AnimationComponent{
 
   @Input() todo:Todo;
+  @Input() animation:string;
+  @Input() direction:string;
+  @Input() delay:string;
+
 
   @Output() toggleDone=new EventEmitter();
   @Output() remove=new EventEmitter();
-  constructor(){}
+  constructor(public elRef:ElementRef,public renderer:Renderer){
+    super(elRef,renderer);
+  }
   onChange(e:any){
     this.todo.done=e.target.checked;
     this.toggleDone.emit(this.todo);

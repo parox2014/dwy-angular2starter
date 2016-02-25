@@ -40,6 +40,7 @@ System.register(['angular2/http', './DataBaseService', 'angular2/core', 'rxjs/Su
                  * @returns {DebugElement[]|ng.DebugElement[]|ngWorker.DebugElement[]}
                  */
                 TodoService.prototype.query = function (query, limit, sort) {
+                    var _this = this;
                     limit = limit || 10;
                     sort = sort || ['createAt', 'DESC'];
                     var option = {
@@ -48,9 +49,8 @@ System.register(['angular2/http', './DataBaseService', 'angular2/core', 'rxjs/Su
                         sort: [sort]
                     };
                     var stream = new Subject_1.Subject();
-                    var list = this.db.queryAll("todos", option);
                     setTimeout(function () {
-                        stream.next(list);
+                        stream.next(_this.db.queryAll("todos", option));
                     }, 100);
                     return stream;
                 };

@@ -8,16 +8,22 @@ import {TodoFilter} from './todo.filter';
 @Component({
   selector: 'todo-list',
   directives: [TodoItem, TodoForm, TodoFilter],
+  host:{
+    'style':'display:block'
+  },
   template: `
   <todo-form (formSubmit)="createTodo($event)"></todo-form>
   <div style="margin-bottom: 20px;" todo-filter="All" (filterChange)="onFilterChange($event)"></div>
 
   <hr>
   <ul *ngIf="todoList.length>0" class="list-unstyled list-group">
-    <todo-item *ngFor="#todo of todoList"
+    <todo-item *ngFor="#todo of todoList,#i=index"
     (toggleDone)="onToggleDone($event)"
     (remove)="onRemove($event)"
-    class="list-group-item" [ngClass]="{'list-group-item-success':todo.done}"
+    [animation]="'slide'"
+    [direction]="'leftToRight'"
+    [delay]="i*50"
+    [ngClass]="{'list-group-item-success':todo.done}"
     [todo]="todo">
     </todo-item>
   </ul>

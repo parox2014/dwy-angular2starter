@@ -1,9 +1,7 @@
-import {Component,Input,Output,EventEmitter,ElementRef,ViewChildren,ContentChildren,QueryList} from 'angular2/core';
-import {BrowserDomAdapter} from 'angular2/platform/browser';
+import {Component,Input,Output,EventEmitter,ElementRef,Renderer,ViewChildren,ContentChildren,QueryList} from 'angular2/core';
 import {CORE_DIRECTIVES,COMMON_DIRECTIVES} from 'angular2/common';
 import {ProfileForm} from '../form/profile.form';
-
-
+import {AnimationComponent} from '../AnimationComponent';
 interface Tab {
   name:string;
   isActive:boolean;
@@ -27,6 +25,7 @@ interface Tab {
   `
 })
 
+
 class TabHeader {
   @Input() tabList:Array<Tab> = [];
   @Input() itemClass:string = '';
@@ -34,16 +33,16 @@ class TabHeader {
 
   @Output() itemClick = new EventEmitter();
 
-  constructor(private eleRef:ElementRef, private dom:BrowserDomAdapter) {
+  constructor(private eleRef:ElementRef, private renderer:Renderer) {
 
   }
   ngOnInit(){
-    let el=this.eleRef.nativeElement;
+    let el=this.eleRef;
 
-    this.dom.setStyle(el, 'display', 'block');
+    this.renderer.setElementStyle(el, 'display', 'block');
 
     if (this.align) {
-      this.dom.addClass(el, 'nav-' + this.align);
+      this.renderer.setElementClass(el,'nav-' + this.align,true);
     }
   }
   onTabItemClick(tab:Tab):void {
@@ -70,23 +69,24 @@ class TabHeader {
 })
 
 class TabPane {
-  private nativeElement:HTMLElement;
 
-  constructor(private elementRef:ElementRef, private browserDom:BrowserDomAdapter) {
-    this.nativeElement = elementRef.nativeElement;
+  constructor(private elRef:ElementRef, private renderer:Renderer) {
+
   }
 
   show() {
-    this.browserDom.addClass(this.nativeElement, 'active');
+    let el=this.elRef;
+    this.renderer.setElementClass(el, 'active',true);
     setTimeout(()=> {
-      this.browserDom.addClass(this.nativeElement, 'in');
+      this.renderer.setElementClass(el, 'in',true);
     }, 100);
 
   }
 
   hide() {
-    this.browserDom.removeClass(this.nativeElement, 'in');
-    this.browserDom.removeClass(this.nativeElement, 'active');
+    let el=this.elRef;
+    this.renderer.setElementClass(el, 'in',false);
+    this.renderer.setElementClass(el, 'active',false);
   }
 }
 
@@ -159,6 +159,9 @@ export class Tabs {
 @Component({
   selector: 'tab-comp',
   directives: [Tabs, TabPane, ProfileForm,CORE_DIRECTIVES],
+  host:{
+    'style':'display:block'
+  },
   template: `
     <div class="well well-lg">current tab is:{{currentTab|json}}</div>
     <br>
@@ -188,7 +191,7 @@ export class Tabs {
   `
 })
 
-export class TabComponent {
+export class TabComponent extends AnimationComponent{
   tabs:Array<Tab> = [
     {name: 'profile', isActive: true},
     {name: 'todos', isActive: false},
@@ -202,6 +205,11 @@ export class TabComponent {
     {name: 'tab4', isActive: false}
   ];
   currentTab:Tab;
+  public animation:string='slide';
+  public direction:string='leftToRight';
+  constructor(public elRef:ElementRef,public renderer:Renderer){
+    super(elRef,renderer);
+  }
 
   onTabActive(tab) {
     this.currentTab = tab;

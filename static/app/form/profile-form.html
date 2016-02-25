@@ -13,7 +13,6 @@
         <input type="email"
                name="email"
                class="form-control"
-               email-required
                required
                [ngFormControl]="emailCtrl">
 
@@ -46,6 +45,20 @@
           <option value="female">female</option>
         </select>
       </div>
+
+      <div class="input-group">
+        <span class="input-group-addon">Age</span>
+        <input type="number"
+               [ngFormControl]="age"
+               name="age"
+               age
+               class="form-control">
+      </div>
+      <div *ngIf="!age.pristine&&age.hasError('number')"
+           class="alert alert-danger"> Age must be a number</div>
+
+      <div *ngIf="!age.pristine&&age.hasError('age')"
+           class="alert alert-danger"> Age must greater than 0 and less than 100</div>
 
       <button type="submit" class="btn btn-primary btn-block" [disabled]="!profileForm.valid">Submit</button>
     </form>

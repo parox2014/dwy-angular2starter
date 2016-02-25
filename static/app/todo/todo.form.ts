@@ -1,14 +1,28 @@
 import {Component,Output,EventEmitter} from 'angular2/core';
-import {CORE_DIRECTIVES,FORM_DIRECTIVES} from "angular2/common";
+import {CORE_DIRECTIVES,FORM_DIRECTIVES,ControlGroup,Control,AbstractControl} from "angular2/common";
 import {Todo} from '../interfaces/todo';
+import {AutoFocus,AutoSelect} from '../directives/directives';
+
+class TodoModel implements Todo{
+  public done:boolean=false;
+  constructor(todo:Object){
+    Object.assign(this,todo);
+  }
+}
 
 @Component({
   selector:'todo-form',
-  directives:[CORE_DIRECTIVES,FORM_DIRECTIVES],
+  directives:[CORE_DIRECTIVES,FORM_DIRECTIVES,AutoFocus,AutoSelect],
   template:`
-    <form #f="ngForm" (submit)="onFormSubmit($event,f.value)">
-      <div class="form-group">
-        <input class="form-control" ngControl="name" autofocus>
+    <form [ngFormModel]="formModel" (submit)="onFormSubmit($event)" novalidate>
+      <div class="input-group">
+        <input type="text" required class="form-control" ngControl="name" auto-focus auto-select>
+        <span class="input-group-btn">
+         <button class="btn btn-success" type="submit" [disabled]="!formModel.valid">Create</button>
+        </span>
+      </div>
+      <div class="alert alert-danger" *ngIf="formModel.controls['name'].hasError('required')">
+        Todo name required
       </div>
     <form>
   `
@@ -18,16 +32,19 @@ export class TodoForm{
 
   @Output() formSubmit = new EventEmitter();
 
+  formModel:AbstractControl;
   constructor(){
-
+    this.formModel=new ControlGroup({
+      name:new Control('example')
+    });
   }
-  onFormSubmit(e:any,param:any){
-    e.preventDefault();
+  onFormSubmit(e:any){
     e.target.reset();
 
-    var todo:Todo=Object.assign({
-      done:false
-    },param);
+    if(!this.formModel.value.name){
+      return;
+    }
+    var todo:Todo=new TodoModel(this.formModel.value);
 
     this.formSubmit.emit(todo);
   }

@@ -1,4 +1,4 @@
-import {bootstrap,BrowserDomAdapter} from 'angular2/platform/browser'
+import {bootstrap} from 'angular2/platform/browser'
 
 import {Inject,Component,provide,PLATFORM_PIPES,ContentChild,enableProdMode} from 'angular2/core';
 import {NG_VALIDATORS} from 'angular2/common';
@@ -65,7 +65,6 @@ bootstrap(Angular2Demo, [ROUTER_PROVIDERS,
   HTTP_PROVIDERS,
   LocalDataBase,
   TodoService,
-  BrowserDomAdapter,
   provide(RequestOptions,{useClass:MyRequestOptions}),
   provide(PLATFORM_PIPES,{useValue:CUSTOM_PIPES,multi:true})
 ]);

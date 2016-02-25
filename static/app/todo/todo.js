@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/platform/browser', 'angular2/router', "./todo.list", "./todo.detail"], function(exports_1) {
+System.register(['angular2/core', 'angular2/router', "./todo.list", "./todo.detail", '../AnimationComponent'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
@@ -13,15 +13,12 @@ System.register(['angular2/core', 'angular2/platform/browser', 'angular2/router'
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, browser_1, router_1, todo_list_1, todo_detail_1;
-    var BaseComponent, TodoComponent;
+    var core_1, router_1, todo_list_1, todo_detail_1, AnimationComponent_1;
+    var TodoComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
-            },
-            function (browser_1_1) {
-                browser_1 = browser_1_1;
             },
             function (router_1_1) {
                 router_1 = router_1_1;
@@ -31,32 +28,20 @@ System.register(['angular2/core', 'angular2/platform/browser', 'angular2/router'
             },
             function (todo_detail_1_1) {
                 todo_detail_1 = todo_detail_1_1;
+            },
+            function (AnimationComponent_1_1) {
+                AnimationComponent_1 = AnimationComponent_1_1;
             }],
         execute: function() {
-            BaseComponent = (function () {
-                function BaseComponent(elRef, dom) {
-                    this.dom = dom;
-                    this.elRef = elRef;
-                    this.dom.addClass(this.elRef.nativeElement, 'fade');
-                }
-                BaseComponent.prototype.ngAfterContentInit = function () {
-                    var _this = this;
-                    setTimeout(function () {
-                        _this.dom.addClass(_this.elRef.nativeElement, 'in');
-                    }, 100);
-                };
-                BaseComponent.prototype.routerCanDeactivate = function () {
-                    this.dom.removeClass(this.elRef.nativeElement, 'in');
-                };
-                return BaseComponent;
-            })();
             TodoComponent = (function (_super) {
                 __extends(TodoComponent, _super);
-                function TodoComponent(elRef, dom) {
-                    _super.call(this, elRef, dom);
+                function TodoComponent(elRef, renderer) {
+                    _super.call(this, elRef, renderer);
                     this.elRef = elRef;
-                    this.dom = dom;
+                    this.renderer = renderer;
                     this.title = 'My Todo';
+                    this.animation = 'slide';
+                    this.direction = 'leftToRight';
                 }
                 TodoComponent = __decorate([
                     core_1.Component({
@@ -72,10 +57,10 @@ System.register(['angular2/core', 'angular2/platform/browser', 'angular2/router'
                         { name: 'Todo', path: '/', component: todo_list_1.TodoList, useAsDefault: true },
                         { name: 'TodoDetail', path: '/:id', component: todo_detail_1.TodoDetail }
                     ]), 
-                    __metadata('design:paramtypes', [core_1.ElementRef, browser_1.BrowserDomAdapter])
+                    __metadata('design:paramtypes', [core_1.ElementRef, core_1.Renderer])
                 ], TodoComponent);
                 return TodoComponent;
-            })(BaseComponent);
+            })(AnimationComponent_1.AnimationComponent);
             exports_1("TodoComponent", TodoComponent);
         }
     }
