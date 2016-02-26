@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/common', '../form/profile.form', '../AnimationComponent'], function(exports_1) {
+System.register(['angular2/core', '../form/profile.form', '../AnimationComponent'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
@@ -13,15 +13,12 @@ System.register(['angular2/core', 'angular2/common', '../form/profile.form', '..
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, common_1, profile_form_1, AnimationComponent_1;
+    var core_1, profile_form_1, AnimationComponent_1;
     var TabPane, Tabs, TabComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
-            },
-            function (common_1_1) {
-                common_1 = common_1_1;
             },
             function (profile_form_1_1) {
                 profile_form_1 = profile_form_1_1;
@@ -52,7 +49,7 @@ System.register(['angular2/core', 'angular2/common', '../form/profile.form', '..
                 TabPane = __decorate([
                     core_1.Component({
                         selector: 'tab-pane',
-                        directives: [common_1.COMMON_DIRECTIVES],
+                        //directives:[COMMON_DIRECTIVES],
                         inputs: ['heading', 'isActive'],
                         host: {
                             'class': 'tab-pane fade',
@@ -101,13 +98,13 @@ System.register(['angular2/core', 'angular2/common', '../form/profile.form', '..
                 Tabs = __decorate([
                     core_1.Component({
                         selector: 'tabs',
-                        directives: [common_1.COMMON_DIRECTIVES],
+                        //directives:[COMMON_DIRECTIVES],
                         inputs: ['itemClass', 'tabAlign'],
                         outputs: ['tabActive'],
                         host: {
                             'style': 'display:block'
                         },
-                        template: "\n  <ul class=\"nav nav-tabs nav-{{tabAlign}}\" role=\"tablist\">\n    <li role=\"presentation\"\n      *ngFor=\"#pane of panes\"\n      [class]=\"itemClass?itemClass:''\"\n      (click)=\"onTabItemClick(pane)\"\n      [class.active]=\"pane.isActive\">\n      <a href=\"javascript:;\" role=\"tab\">{{pane.heading}}</a>\n    </li>\n  </ul>\n  <div class=\"tab-content\">\n    <ng-content></ng-content>\n  </div>\n\n  "
+                        template: "\n  <ul class=\"nav nav-tabs nav-{{tabAlign}}\" role=\"tablist\">\n    <li role=\"presentation\"\n      *ngFor=\"#pane of panes\"\n      [class]=\"itemClass?itemClass:''\"\n      (click)=\"onTabItemClick(pane)\"\n      [ngClass]=\"{active:pane.isActive,fuck:pane.isActive}\">\n      <a href=\"javascript:;\" role=\"tab\">{{pane.heading}}</a>\n    </li>\n  </ul>\n  <div class=\"tab-content\">\n    <ng-content></ng-content>\n  </div>\n\n  "
                     }), 
                     __metadata('design:paramtypes', [])
                 ], Tabs);
@@ -130,7 +127,7 @@ System.register(['angular2/core', 'angular2/common', '../form/profile.form', '..
                 TabComponent = __decorate([
                     core_1.Component({
                         selector: 'tab-comp',
-                        directives: [Tabs, TabPane, profile_form_1.ProfileForm, common_1.COMMON_DIRECTIVES],
+                        directives: [Tabs, TabPane, profile_form_1.ProfileForm],
                         host: {
                             'style': 'display:block'
                         },

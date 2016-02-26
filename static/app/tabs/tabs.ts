@@ -9,21 +9,18 @@ import {
   AfterContentInit
 } from 'angular2/core';
 
-import {COMMON_DIRECTIVES} from 'angular2/common';
 import {ProfileForm} from '../form/profile.form';
 import {AnimationComponent} from '../AnimationComponent';
-import {AbstractControl} from "angular2/common";
-import {FormBuilder} from "angular2/common";
 
 
 @Component({
   selector: 'tab-pane',
-  directives:[COMMON_DIRECTIVES],
+  //directives:[COMMON_DIRECTIVES],
   inputs:['heading','isActive'],
   host:{
     'class':'tab-pane fade',
     'role':'tabpanel'
-    //'[ngClass]':'{active:isActive,in:isActive}'
+    //'[ngClass]':'{active:isActive,"in":isActive}'
     //'[class.active]':'isActive',
     //'[class.in]':'isActive'
   },
@@ -54,7 +51,7 @@ export class TabPane {
 
 @Component({
   selector: 'tabs',
-  directives:[COMMON_DIRECTIVES],
+  //directives:[COMMON_DIRECTIVES],
   inputs:['itemClass','tabAlign'],
   outputs:['tabActive'],
   host:{
@@ -66,7 +63,7 @@ export class TabPane {
       *ngFor="#pane of panes"
       [class]="itemClass?itemClass:''"
       (click)="onTabItemClick(pane)"
-      [class.active]="pane.isActive">
+      [ngClass]="{active:pane.isActive,fuck:pane.isActive}">
       <a href="javascript:;" role="tab">{{pane.heading}}</a>
     </li>
   </ul>
@@ -122,7 +119,7 @@ export class Tabs implements AfterContentInit{
 //使用方法
 @Component({
   selector: 'tab-comp',
-  directives: [Tabs, TabPane, ProfileForm,COMMON_DIRECTIVES],
+  directives: [Tabs, TabPane, ProfileForm],
   host:{
     'style':'display:block'
   },
