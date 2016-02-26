@@ -27,7 +27,7 @@ server.use(favicon(__dirname + '/static/images/favicon.ico'));
 server.use(function (req, res,next) {
   var _path=req.path;
   //console.log(_path);
-  if(_path.indexOf('/api')>=0||_path.indexOf('/node_modules')>=0){
+  if(_path.indexOf('/api')>=0){
     next();
   }else{
     res.render('index');
