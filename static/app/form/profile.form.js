@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/common', '../directives/directives', '../AnimationComponent'], function(exports_1) {
+System.register(['angular2/core', 'angular2/common', '../AnimationComponent'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
@@ -13,7 +13,7 @@ System.register(['angular2/core', 'angular2/common', '../directives/directives',
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, common_1, directives_1, AnimationComponent_1;
+    var core_1, common_1, AnimationComponent_1;
     var ProfileForm;
     return {
         setters:[
@@ -22,9 +22,6 @@ System.register(['angular2/core', 'angular2/common', '../directives/directives',
             },
             function (common_1_1) {
                 common_1 = common_1_1;
-            },
-            function (directives_1_1) {
-                directives_1 = directives_1_1;
             },
             function (AnimationComponent_1_1) {
                 AnimationComponent_1 = AnimationComponent_1_1;
@@ -65,11 +62,7 @@ System.register(['angular2/core', 'angular2/common', '../directives/directives',
                     core_1.Component({
                         selector: 'profile-form',
                         directives: [
-                            common_1.FORM_DIRECTIVES,
-                            common_1.CORE_DIRECTIVES,
-                            directives_1.EmailRequiredDirective,
-                            directives_1.NumberRequired,
-                            directives_1.AgeRequired
+                            common_1.COMMON_DIRECTIVES
                         ],
                         templateUrl: 'app/form/profile-form.html'
                     }), 

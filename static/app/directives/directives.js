@@ -9,7 +9,7 @@ System.register(['angular2/core', 'angular2/common'], function(exports_1) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1, common_1;
-    var EMAIL_REG, EmailRequiredDirective, NumberRequired, AgeRequired, AutoFocus, AutoSelect;
+    var any, EMAIL_REG, EmailRequiredDirective, NumberRequired, AgeRequired, AutoFocus, AutoSelect, CUSTOM_DIRECTIVES;
     return {
         setters:[
             function (core_1_1) {
@@ -72,43 +72,52 @@ System.register(['angular2/core', 'angular2/common'], function(exports_1) {
             })();
             exports_1("AgeRequired", AgeRequired);
             AutoFocus = (function () {
-                function AutoFocus(elRef) {
+                function AutoFocus(elRef, renderer) {
                     this.elRef = elRef;
+                    this.renderer = renderer;
                 }
-                AutoFocus.prototype.ngAfterContentInit = function () {
+                AutoFocus.prototype.ngOnInit = function () {
                     var _this = this;
                     setTimeout(function () {
-                        _this.elRef.nativeElement.focus();
+                        _this.renderer.invokeElementMethod(_this.elRef, 'focus', []);
                     }, 50);
                 };
                 AutoFocus = __decorate([
                     core_1.Directive({
                         selector: 'input[auto-focus]'
                     }), 
-                    __metadata('design:paramtypes', [core_1.ElementRef])
+                    __metadata('design:paramtypes', [core_1.ElementRef, core_1.Renderer])
                 ], AutoFocus);
                 return AutoFocus;
             })();
             exports_1("AutoFocus", AutoFocus);
             AutoSelect = (function () {
-                function AutoSelect(elRef) {
+                function AutoSelect(elRef, renderer) {
                     this.elRef = elRef;
+                    this.renderer = renderer;
                 }
-                AutoSelect.prototype.ngAfterContentInit = function () {
+                AutoSelect.prototype.ngOnInit = function () {
                     var _this = this;
                     setTimeout(function () {
-                        _this.elRef.nativeElement.select();
+                        _this.renderer.invokeElementMethod(_this.elRef, 'select', []);
                     }, 50);
                 };
                 AutoSelect = __decorate([
                     core_1.Directive({
                         selector: 'input[auto-select]'
                     }), 
-                    __metadata('design:paramtypes', [core_1.ElementRef])
+                    __metadata('design:paramtypes', [core_1.ElementRef, core_1.Renderer])
                 ], AutoSelect);
                 return AutoSelect;
             })();
             exports_1("AutoSelect", AutoSelect);
+            exports_1("CUSTOM_DIRECTIVES", CUSTOM_DIRECTIVES = [
+                EmailRequiredDirective,
+                NumberRequired,
+                AgeRequired,
+                AutoFocus,
+                AutoSelect
+            ]);
         }
     }
 });

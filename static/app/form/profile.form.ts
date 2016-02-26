@@ -1,6 +1,18 @@
-import {Component,ElementRef,Renderer} from 'angular2/core';
-import {FORM_DIRECTIVES,CORE_DIRECTIVES,FormBuilder,AbstractControl,Control,ControlGroup} from 'angular2/common';
-import {EmailRequiredDirective,NumberRequired,AgeRequired} from '../directives/directives';
+import {
+  Component,
+  ElementRef,
+  Renderer,
+  provide,
+  PLATFORM_DIRECTIVES
+} from 'angular2/core';
+
+import {
+  COMMON_DIRECTIVES,//COMMON_DIRECTIVES包含CORE_DIRECTIVES与FORM_DIRECTIVES
+  FormBuilder,
+  AbstractControl,
+  Control,ControlGroup
+} from 'angular2/common';
+
 import {AnimationComponent} from '../AnimationComponent';
 import {Profile} from './profile.interface';
 
@@ -8,11 +20,7 @@ import {Profile} from './profile.interface';
 @Component({
   selector:'profile-form',
   directives:[
-    FORM_DIRECTIVES,
-    CORE_DIRECTIVES,
-    EmailRequiredDirective,
-    NumberRequired,
-    AgeRequired
+    COMMON_DIRECTIVES
   ],
   templateUrl:'app/form/profile-form.html'
 })

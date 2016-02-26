@@ -1,106 +1,75 @@
-import {Component,Input,Output,EventEmitter,ElementRef,Renderer,ViewChildren,ContentChildren,QueryList} from 'angular2/core';
-import {CORE_DIRECTIVES,COMMON_DIRECTIVES} from 'angular2/common';
+import {
+  Component,
+  Query,
+  ContentChildren,
+  EventEmitter,
+  ElementRef,
+  Renderer,
+  QueryList,
+  AfterContentInit
+} from 'angular2/core';
+
+import {COMMON_DIRECTIVES} from 'angular2/common';
 import {ProfileForm} from '../form/profile.form';
 import {AnimationComponent} from '../AnimationComponent';
-interface Tab {
-  name:string;
-  isActive:boolean;
-}
+import {AbstractControl} from "angular2/common";
+import {FormBuilder} from "angular2/common";
 
-@Component({
-  selector: 'tab-header',
-  directives: [CORE_DIRECTIVES, COMMON_DIRECTIVES],
-  host:{
-    'class':'nav nav-tabs',
-    'role':'tablist'
-  },
-  template: `
-    <li role="presentation"
-      *ngFor="#tab of tabList"
-      [class]="itemClass?itemClass:''"
-       (click)="onTabItemClick(tab)"
-      [class.active]="tab.isActive">
-      <a href="javascript:;" role="tab">{{tab.name}}</a>
-    </li>
-  `
-})
-
-
-class TabHeader {
-  @Input() tabList:Array<Tab> = [];
-  @Input() itemClass:string = '';
-  @Input() align:string = '';
-
-  @Output() itemClick = new EventEmitter();
-
-  constructor(private eleRef:ElementRef, private renderer:Renderer) {
-
-  }
-  ngOnInit(){
-    let el=this.eleRef;
-
-    this.renderer.setElementStyle(el, 'display', 'block');
-
-    if (this.align) {
-      this.renderer.setElementClass(el,'nav-' + this.align,true);
-    }
-  }
-  onTabItemClick(tab:Tab):void {
-    tab.isActive = true;
-    this.tabList.forEach((item)=> {
-      if (item.name != tab.name) {
-        item.isActive = false;
-      }
-    });
-
-    this.itemClick.emit(tab);
-  }
-}
 
 @Component({
   selector: 'tab-pane',
+  directives:[COMMON_DIRECTIVES],
+  inputs:['heading','isActive'],
   host:{
     'class':'tab-pane fade',
     'role':'tabpanel'
+    //'[ngClass]':'{active:isActive,in:isActive}'
+    //'[class.active]':'isActive',
+    //'[class.in]':'isActive'
   },
   template: `
     <ng-content></ng-content>
   `
 })
 
-class TabPane {
-
-  constructor(private elRef:ElementRef, private renderer:Renderer) {
-
-  }
-
-  show() {
-    let el=this.elRef;
-    this.renderer.setElementClass(el, 'active',true);
-    setTimeout(()=> {
-      this.renderer.setElementClass(el, 'in',true);
-    }, 100);
+export class TabPane {
+  public heading:string;
+  public isActive:boolean=false;
+  constructor(private _elRef:ElementRef,private _renderer:Renderer){
 
   }
-
-  hide() {
-    let el=this.elRef;
-    this.renderer.setElementClass(el, 'in',false);
-    this.renderer.setElementClass(el, 'active',false);
+  show(){
+    this._renderer.setElementClass(this._elRef,'active',true);
+    setTimeout(()=>{
+      this._renderer.setElementClass(this._elRef,'in',true);
+    },50);
+    this.isActive=true;
+  }
+  hide(){
+    this._renderer.setElementClass(this._elRef,'active',false);
+    this._renderer.setElementClass(this._elRef,'in',false);
+    this.isActive=false;
   }
 }
 
 @Component({
   selector: 'tabs',
-  directives: [TabHeader],
+  directives:[COMMON_DIRECTIVES],
+  inputs:['itemClass','tabAlign'],
+  outputs:['tabActive'],
   host:{
     'style':'display:block'
   },
   template: `
-  <tab-header [tabList]="tabList"
-    [itemClass]="itemClass"
-    [align]="tabAlign"
-    (itemClick)="onTabClick($event)"></tab-header>
+  <ul class="nav nav-tabs nav-{{tabAlign}}" role="tablist">
+    <li role="presentation"
+      *ngFor="#pane of panes"
+      [class]="itemClass?itemClass:''"
+      (click)="onTabItemClick(pane)"
+      [class.active]="pane.isActive">
+      <a href="javascript:;" role="tab">{{pane.heading}}</a>
+    </li>
+  </ul>
   <div class="tab-content">
     <ng-content></ng-content>
   </div>
@@ -108,83 +77,71 @@ class TabPane {
   `
 })
 
-export class Tabs {
-  @Input() tabList:Array<Tab> = [];
-  @Input() itemClass:string;
-  @Input() tabAlign:string;
+export class Tabs implements AfterContentInit{
+  public itemClass:string;
+  public tabAlign:string;
 
-  @Output() tabActive = new EventEmitter();
+  tabActive = new EventEmitter();
 
-  @ContentChildren(TabPane) tabPane:QueryList<TabPane>;
+  @ContentChildren(TabPane)
 
+  panes:QueryList<TabPane>;
+  constructor(){
 
-  ngAfterContentInit() {
-    this.onTabClick(this.getActiveTab());
   }
 
-  getActiveTab():Tab {
-    let tabList = this.tabList;
-    let len:number = tabList.length;
-    let i:number = 0;
-    let tab:Tab;
+  ngAfterContentInit(){
+    this.onTabItemClick(this.getActivePane());
+  }
+  getActivePane():TabPane{
+    let panes=this.panes.toArray();
+    let len:number=this.panes.length;
+    let i:number=0;
+    let pane;
 
-    for (; i < len; i++) {
-
-      tab = tabList[i];
-
-      if (tab.isActive) {
+    for(;i<len;i++){
+      pane=panes[i];
+      if(pane.isActive){
         break;
       }
     }
-
-    return tab;
+    return pane;
   }
-
-  onTabClick(tab:Tab):void {
-    var index:number = this.tabList.indexOf(tab);
-    this.activeTabPaneByIndex(index);
-    this.tabActive.emit(tab);
-  }
-
-  activeTabPaneByIndex(index:number):void {
-    this.tabPane.toArray().forEach((tabPane:TabPane, i:number)=> {
-      let method:string = index === i ? 'show' : 'hide';
-
-      tabPane[method]();
+  onTabItemClick(pane:TabPane):void {
+    pane.show();
+    this.panes.toArray().forEach((item)=> {
+      if (item != pane) {
+        item.hide();
+      }
     });
+    this.tabActive.emit(pane);
   }
-
 }
 
+
+//使用方法
 @Component({
   selector: 'tab-comp',
-  directives: [Tabs, TabPane, ProfileForm,CORE_DIRECTIVES],
+  directives: [Tabs, TabPane, ProfileForm,COMMON_DIRECTIVES],
   host:{
     'style':'display:block'
   },
   template: `
-    <div class="well well-lg">current tab is:{{currentTab|json}}</div>
+    <div class="well">current tab is:{{currentPane?currentPane.heading:''}}</div>
     <br>
-    <tabs [tabList]="tabs" [tabAlign]="'justified'" (tabActive)="onTabActive($event)">
+    <tabs (tabActive)="onTabActive($event)">
 
-      <tab-pane>
+      <tab-pane [heading]="'Profile Form'" [isActive]="true">
         <profile-form></profile-form>
       </tab-pane>
-      <tab-pane>
+      <tab-pane [heading]="'Todo'">
         <h1>Todo</h1>
       </tab-pane>
-      <tab-pane>
+      <tab-pane [heading]="'Message'">
         <h1>message</h1>
       </tab-pane>
-      <tab-pane>
+      <tab-pane [heading]="'Settings'">
         <h1>settings</h1>
-      </tab-pane>
-    </tabs>
-
-    <tabs [tabList]="secondTabs" (tabActive)="onTabActive($event)">
-
-      <tab-pane *ngFor="#tab of secondTabs">
-        <h1>{{tab.name}}</h1>
       </tab-pane>
 
     </tabs>
@@ -192,27 +149,15 @@ export class Tabs {
 })
 
 export class TabComponent extends AnimationComponent{
-  tabs:Array<Tab> = [
-    {name: 'profile', isActive: true},
-    {name: 'todos', isActive: false},
-    {name: 'message', isActive: false},
-    {name: 'settings', isActive: false}
-  ];
-  secondTabs:Tab[]=[
-    {name: 'tab1', isActive: false},
-    {name: 'tab2', isActive: true},
-    {name: 'tab3', isActive: false},
-    {name: 'tab4', isActive: false}
-  ];
-  currentTab:Tab;
+
+  currentPane:TabPane;
   public animation:string='slide';
   public direction:string='leftToRight';
   constructor(public elRef:ElementRef,public renderer:Renderer){
     super(elRef,renderer);
   }
 
-  onTabActive(tab) {
-    this.currentTab = tab;
-    console.log(tab);
+  onTabActive(pane:TabPane) {
+    this.currentPane = pane;
   }
 }

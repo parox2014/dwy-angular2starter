@@ -51,7 +51,7 @@ System.register(['angular2/core', "angular2/common", '../directives/directives']
                 TodoForm = __decorate([
                     core_1.Component({
                         selector: 'todo-form',
-                        directives: [common_1.CORE_DIRECTIVES, common_1.FORM_DIRECTIVES, directives_1.AutoFocus, directives_1.AutoSelect],
+                        directives: [common_1.COMMON_DIRECTIVES, directives_1.AutoFocus, directives_1.AutoSelect],
                         template: "\n    <form [ngFormModel]=\"formModel\" (submit)=\"onFormSubmit($event)\" novalidate>\n      <div class=\"input-group\">\n        <input type=\"text\" required class=\"form-control\" ngControl=\"name\" auto-focus auto-select>\n        <span class=\"input-group-btn\">\n         <button class=\"btn btn-success\" type=\"submit\" [disabled]=\"!formModel.valid\">Create</button>\n        </span>\n      </div>\n      <div class=\"alert alert-danger\" *ngIf=\"formModel.controls['name'].hasError('required')\">\n        Todo name required\n      </div>\n    <form>\n  "
                     }), 
                     __metadata('design:paramtypes', [])

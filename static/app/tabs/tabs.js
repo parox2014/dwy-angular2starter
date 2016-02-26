@@ -14,7 +14,7 @@ System.register(['angular2/core', 'angular2/common', '../form/profile.form', '..
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1, common_1, profile_form_1, AnimationComponent_1;
-    var TabHeader, TabPane, Tabs, TabComponent;
+    var TabPane, Tabs, TabComponent;
     return {
         setters:[
             function (core_1_1) {
@@ -30,82 +30,30 @@ System.register(['angular2/core', 'angular2/common', '../form/profile.form', '..
                 AnimationComponent_1 = AnimationComponent_1_1;
             }],
         execute: function() {
-            TabHeader = (function () {
-                function TabHeader(eleRef, renderer) {
-                    this.eleRef = eleRef;
-                    this.renderer = renderer;
-                    this.tabList = [];
-                    this.itemClass = '';
-                    this.align = '';
-                    this.itemClick = new core_1.EventEmitter();
-                }
-                TabHeader.prototype.ngOnInit = function () {
-                    var el = this.eleRef;
-                    this.renderer.setElementStyle(el, 'display', 'block');
-                    if (this.align) {
-                        this.renderer.setElementClass(el, 'nav-' + this.align, true);
-                    }
-                };
-                TabHeader.prototype.onTabItemClick = function (tab) {
-                    tab.isActive = true;
-                    this.tabList.forEach(function (item) {
-                        if (item.name != tab.name) {
-                            item.isActive = false;
-                        }
-                    });
-                    this.itemClick.emit(tab);
-                };
-                __decorate([
-                    core_1.Input(), 
-                    __metadata('design:type', Array)
-                ], TabHeader.prototype, "tabList", void 0);
-                __decorate([
-                    core_1.Input(), 
-                    __metadata('design:type', String)
-                ], TabHeader.prototype, "itemClass", void 0);
-                __decorate([
-                    core_1.Input(), 
-                    __metadata('design:type', String)
-                ], TabHeader.prototype, "align", void 0);
-                __decorate([
-                    core_1.Output(), 
-                    __metadata('design:type', Object)
-                ], TabHeader.prototype, "itemClick", void 0);
-                TabHeader = __decorate([
-                    core_1.Component({
-                        selector: 'tab-header',
-                        directives: [common_1.CORE_DIRECTIVES, common_1.COMMON_DIRECTIVES],
-                        host: {
-                            'class': 'nav nav-tabs',
-                            'role': 'tablist'
-                        },
-                        template: "\n    <li role=\"presentation\"\n      *ngFor=\"#tab of tabList\"\n      [class]=\"itemClass?itemClass:''\"\n       (click)=\"onTabItemClick(tab)\"\n      [class.active]=\"tab.isActive\">\n      <a href=\"javascript:;\" role=\"tab\">{{tab.name}}</a>\n    </li>\n  "
-                    }), 
-                    __metadata('design:paramtypes', [core_1.ElementRef, core_1.Renderer])
-                ], TabHeader);
-                return TabHeader;
-            })();
             TabPane = (function () {
-                function TabPane(elRef, renderer) {
-                    this.elRef = elRef;
-                    this.renderer = renderer;
+                function TabPane(_elRef, _renderer) {
+                    this._elRef = _elRef;
+                    this._renderer = _renderer;
+                    this.isActive = false;
                 }
                 TabPane.prototype.show = function () {
                     var _this = this;
-                    var el = this.elRef;
-                    this.renderer.setElementClass(el, 'active', true);
+                    this._renderer.setElementClass(this._elRef, 'active', true);
                     setTimeout(function () {
-                        _this.renderer.setElementClass(el, 'in', true);
-                    }, 100);
+                        _this._renderer.setElementClass(_this._elRef, 'in', true);
+                    }, 50);
+                    this.isActive = true;
                 };
                 TabPane.prototype.hide = function () {
-                    var el = this.elRef;
-                    this.renderer.setElementClass(el, 'in', false);
-                    this.renderer.setElementClass(el, 'active', false);
+                    this._renderer.setElementClass(this._elRef, 'active', false);
+                    this._renderer.setElementClass(this._elRef, 'in', false);
+                    this.isActive = false;
                 };
                 TabPane = __decorate([
                     core_1.Component({
                         selector: 'tab-pane',
+                        directives: [common_1.COMMON_DIRECTIVES],
+                        inputs: ['heading', 'isActive'],
                         host: {
                             'class': 'tab-pane fade',
                             'role': 'tabpanel'
@@ -116,105 +64,77 @@ System.register(['angular2/core', 'angular2/common', '../form/profile.form', '..
                 ], TabPane);
                 return TabPane;
             })();
+            exports_1("TabPane", TabPane);
             Tabs = (function () {
                 function Tabs() {
-                    this.tabList = [];
                     this.tabActive = new core_1.EventEmitter();
                 }
                 Tabs.prototype.ngAfterContentInit = function () {
-                    this.onTabClick(this.getActiveTab());
+                    this.onTabItemClick(this.getActivePane());
                 };
-                Tabs.prototype.getActiveTab = function () {
-                    var tabList = this.tabList;
-                    var len = tabList.length;
+                Tabs.prototype.getActivePane = function () {
+                    var panes = this.panes.toArray();
+                    var len = this.panes.length;
                     var i = 0;
-                    var tab;
+                    var pane;
                     for (; i < len; i++) {
-                        tab = tabList[i];
-                        if (tab.isActive) {
+                        pane = panes[i];
+                        if (pane.isActive) {
                             break;
                         }
                     }
-                    return tab;
+                    return pane;
                 };
-                Tabs.prototype.onTabClick = function (tab) {
-                    var index = this.tabList.indexOf(tab);
-                    this.activeTabPaneByIndex(index);
-                    this.tabActive.emit(tab);
-                };
-                Tabs.prototype.activeTabPaneByIndex = function (index) {
-                    this.tabPane.toArray().forEach(function (tabPane, i) {
-                        var method = index === i ? 'show' : 'hide';
-                        tabPane[method]();
+                Tabs.prototype.onTabItemClick = function (pane) {
+                    pane.show();
+                    this.panes.toArray().forEach(function (item) {
+                        if (item != pane) {
+                            item.hide();
+                        }
                     });
+                    this.tabActive.emit(pane);
                 };
-                __decorate([
-                    core_1.Input(), 
-                    __metadata('design:type', Array)
-                ], Tabs.prototype, "tabList", void 0);
-                __decorate([
-                    core_1.Input(), 
-                    __metadata('design:type', String)
-                ], Tabs.prototype, "itemClass", void 0);
-                __decorate([
-                    core_1.Input(), 
-                    __metadata('design:type', String)
-                ], Tabs.prototype, "tabAlign", void 0);
-                __decorate([
-                    core_1.Output(), 
-                    __metadata('design:type', Object)
-                ], Tabs.prototype, "tabActive", void 0);
                 __decorate([
                     core_1.ContentChildren(TabPane), 
                     __metadata('design:type', core_1.QueryList)
-                ], Tabs.prototype, "tabPane", void 0);
+                ], Tabs.prototype, "panes", void 0);
                 Tabs = __decorate([
                     core_1.Component({
                         selector: 'tabs',
-                        directives: [TabHeader],
+                        directives: [common_1.COMMON_DIRECTIVES],
+                        inputs: ['itemClass', 'tabAlign'],
+                        outputs: ['tabActive'],
                         host: {
                             'style': 'display:block'
                         },
-                        template: "\n  <tab-header [tabList]=\"tabList\"\n    [itemClass]=\"itemClass\"\n    [align]=\"tabAlign\"\n    (itemClick)=\"onTabClick($event)\"></tab-header>\n  <div class=\"tab-content\">\n    <ng-content></ng-content>\n  </div>\n\n  "
+                        template: "\n  <ul class=\"nav nav-tabs nav-{{tabAlign}}\" role=\"tablist\">\n    <li role=\"presentation\"\n      *ngFor=\"#pane of panes\"\n      [class]=\"itemClass?itemClass:''\"\n      (click)=\"onTabItemClick(pane)\"\n      [class.active]=\"pane.isActive\">\n      <a href=\"javascript:;\" role=\"tab\">{{pane.heading}}</a>\n    </li>\n  </ul>\n  <div class=\"tab-content\">\n    <ng-content></ng-content>\n  </div>\n\n  "
                     }), 
                     __metadata('design:paramtypes', [])
                 ], Tabs);
                 return Tabs;
             })();
             exports_1("Tabs", Tabs);
+            //使用方法
             TabComponent = (function (_super) {
                 __extends(TabComponent, _super);
                 function TabComponent(elRef, renderer) {
                     _super.call(this, elRef, renderer);
                     this.elRef = elRef;
                     this.renderer = renderer;
-                    this.tabs = [
-                        { name: 'profile', isActive: true },
-                        { name: 'todos', isActive: false },
-                        { name: 'message', isActive: false },
-                        { name: 'settings', isActive: false }
-                    ];
-                    this.secondTabs = [
-                        { name: 'tab1', isActive: false },
-                        { name: 'tab2', isActive: true },
-                        { name: 'tab3', isActive: false },
-                        { name: 'tab4', isActive: false }
-                    ];
                     this.animation = 'slide';
                     this.direction = 'leftToRight';
                 }
-                TabComponent.prototype.onTabActive = function (tab) {
-                    this.currentTab = tab;
-                    console.log(tab);
+                TabComponent.prototype.onTabActive = function (pane) {
+                    this.currentPane = pane;
                 };
                 TabComponent = __decorate([
                     core_1.Component({
                         selector: 'tab-comp',
-                        directives: [Tabs, TabPane, profile_form_1.ProfileForm, common_1.CORE_DIRECTIVES],
+                        directives: [Tabs, TabPane, profile_form_1.ProfileForm, common_1.COMMON_DIRECTIVES],
                         host: {
                             'style': 'display:block'
                         },
-                        template: "\n    <div class=\"well well-lg\">current tab is:{{currentTab|json}}</div>\n    <br>\n    <tabs [tabList]=\"tabs\" [tabAlign]=\"'justified'\" (tabActive)=\"onTabActive($event)\">\n\n      <tab-pane>\n        <profile-form></profile-form>\n      </tab-pane>\n      <tab-pane>\n        <h1>Todo</h1>\n      </tab-pane>\n      <tab-pane>\n        <h1>message</h1>\n      </tab-pane>\n      <tab-pane>\n        <h1>settings</h1>\n      </tab-pane>\n    </tabs>\n\n    <tabs [tabList]=\"secondTabs\" (tabActive)=\"onTabActive($event)\">\n\n      <tab-pane *ngFor=\"#tab of secondTabs\">\n        <h1>{{tab.name}}</h1>\n      </tab-pane>\n\n    </tabs>\n  "
+                        template: "\n    <div class=\"well\">current tab is:{{currentPane?currentPane.heading:''}}</div>\n    <br>\n    <tabs (tabActive)=\"onTabActive($event)\">\n\n      <tab-pane [heading]=\"'Profile Form'\" [isActive]=\"true\">\n        <profile-form></profile-form>\n      </tab-pane>\n      <tab-pane [heading]=\"'Todo'\">\n        <h1>Todo</h1>\n      </tab-pane>\n      <tab-pane [heading]=\"'Message'\">\n        <h1>message</h1>\n      </tab-pane>\n      <tab-pane [heading]=\"'Settings'\">\n        <h1>settings</h1>\n      </tab-pane>\n\n    </tabs>\n  "
                     }), 
                     __metadata('design:paramtypes', [core_1.ElementRef, core_1.Renderer])
                 ], TabComponent);

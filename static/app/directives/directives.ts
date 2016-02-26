@@ -1,5 +1,7 @@
-import {Directive,provide,ElementRef} from 'angular2/core'
+import {Directive,provide,ElementRef,Renderer,OnInit} from 'angular2/core'
 import {NG_VALIDATORS,Validator,Control} from 'angular2/common'
+import {CONST} from "angular2/src/facade/lang";
+import any = jasmine.any;
 
 
 const EMAIL_REG:RegExp = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -43,14 +45,14 @@ export class AgeRequired implements Validator {
   selector: 'input[auto-focus]'
 })
 
-export class AutoFocus {
-  constructor(private elRef:ElementRef) {
+export class AutoFocus implements OnInit{
+  constructor(private elRef:ElementRef,private renderer:Renderer) {
 
   }
 
-  ngAfterContentInit() {
+  ngOnInit() {
     setTimeout(()=> {
-      this.elRef.nativeElement.focus();
+      this.renderer.invokeElementMethod(this.elRef,'focus',[]);
     }, 50);
   }
 }
@@ -59,14 +61,22 @@ export class AutoFocus {
   selector: 'input[auto-select]'
 })
 
-export class AutoSelect {
-  constructor(private elRef:ElementRef) {
+export class AutoSelect implements OnInit{
+  constructor(private elRef:ElementRef,private renderer:Renderer) {
 
   }
 
-  ngAfterContentInit() {
+  ngOnInit() {
     setTimeout(()=> {
-      this.elRef.nativeElement.select();
+      this.renderer.invokeElementMethod(this.elRef,'select',[]);
     }, 50);
   }
 }
+
+export const CUSTOM_DIRECTIVES:any[]=[
+  EmailRequiredDirective,
+  NumberRequired,
+  AgeRequired,
+  AutoFocus,
+  AutoSelect
+];

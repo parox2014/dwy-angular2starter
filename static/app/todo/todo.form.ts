@@ -1,5 +1,5 @@
 import {Component,Output,EventEmitter} from 'angular2/core';
-import {CORE_DIRECTIVES,FORM_DIRECTIVES,ControlGroup,Control,AbstractControl} from "angular2/common";
+import {COMMON_DIRECTIVES,ControlGroup,Control,AbstractControl} from "angular2/common";
 import {Todo} from '../interfaces/todo';
 import {AutoFocus,AutoSelect} from '../directives/directives';
 
@@ -12,7 +12,7 @@ class TodoModel implements Todo{
 
 @Component({
   selector:'todo-form',
-  directives:[CORE_DIRECTIVES,FORM_DIRECTIVES,AutoFocus,AutoSelect],
+  directives:[COMMON_DIRECTIVES,AutoFocus,AutoSelect],
   template:`
     <form [ngFormModel]="formModel" (submit)="onFormSubmit($event)" novalidate>
       <div class="input-group">
