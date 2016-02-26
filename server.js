@@ -64,7 +64,8 @@ server.use(function(err, req, res, next) {
   });
 });
 
-server.locals.base='http://45.78.10.69:3000/';
+//server.locals.base='./';
+server.locals.base='http://45.78.10.69:3000//';
 server.listen(3000, function() {
   console.log('server start success at port:' + 3000);
 });

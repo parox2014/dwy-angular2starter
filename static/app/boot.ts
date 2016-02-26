@@ -1,4 +1,5 @@
 import {bootstrap} from 'angular2/platform/browser'
+import {LocationStrategy,HashLocationStrategy} from 'angular2/router'
 import {Angular2Demo} from './app'
 import {CUSTOM_DIRECTIVES} from './directives/directives';
 
@@ -56,6 +57,7 @@ bootstrap(Angular2Demo, [ROUTER_PROVIDERS,
   provide(PLATFORM_PIPES, {useValue: CUSTOM_PIPES, multi: true}),
   //与上同
   provide(PLATFORM_DIRECTIVES,{useValue:CUSTOM_DIRECTIVES,multi:true})
+  //provide(LocationStrategy, {useClass: HashLocationStrategy})
 ]).then(()=> {
   console.info('Application bootstrap success');
 });
