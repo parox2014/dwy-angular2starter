@@ -4,12 +4,14 @@ import {Todo} from '../interfaces/todo';
 import {TodoService} from '../services/TodoService';
 import {TodoForm} from './todo.form';
 import {TodoFilter} from './todo.filter';
+import {Dialog} from '../modal/modal';
 
 @Component({
   selector: 'todo-list',
   directives: [TodoItem, TodoForm, TodoFilter],
-  host:{
-    'style':'display:block'
+  providers:[Dialog],
+  host: {
+    'style': 'display:block'
   },
   template: `
   <todo-form (formSubmit)="createTodo($event)"></todo-form>
@@ -36,7 +38,7 @@ export class TodoList {
   currentFilter = 'All';
 
   //如果前面加了private 或者public修饰，该属性或自动成为类的成员
-  constructor(private todoService:TodoService) {
+  constructor(private todoService:TodoService, private dialog:Dialog) {
   }
 
   ngOnInit() {
@@ -63,8 +65,14 @@ export class TodoList {
   }
 
   onRemove(id:number) {
-    this.todoService.removeById(id);
-    this.query();
+    this.dialog.open('Are you sure to remove this todo?')
+      .then((sure)=> {
+        if(sure){
+          this.todoService.removeById(id);
+          this.query();
+        }
+      });
+
   }
 
   onFilterChange(filter:any) {

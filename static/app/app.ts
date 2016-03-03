@@ -1,16 +1,18 @@
 import {
   Inject,
   Component,
+  ElementRef
 } from 'angular2/core';
 
 import {
   RouteConfig,
-  ROUTER_DIRECTIVES,
+  ROUTER_DIRECTIVES
 } from "angular2/router";
 
 import {ProfileForm} from './form/profile.form';
 import {TodoComponent} from "./todo/todo";
 import {TabComponent} from "./tabs/tabs";
+import {ModalComponent} from './modal/modal'
 
 
 @Component({
@@ -45,14 +47,16 @@ import {TabComponent} from "./tabs/tabs";
   {path: "/todo/...", component: TodoComponent, name: "Todo", useAsDefault: true},
   {path: "/profile-form", component: ProfileForm, name: "ProfileForm"},
   {path: "/tabs", component: TabComponent, name: "Tabs"},
+  {path: "/modal", component: ModalComponent, name: "Modal"}
+
 ])
 
-export class Angular2Demo {
+export class Angular2Demo{
   private title:string;
-  private navList:Array<any>;
-  constructor(@Inject('appConfig') appConfig){
+  public navList:Array<any>;
+  constructor(@Inject('appConfig') appConfig,public elRef:ElementRef){
     this.title=appConfig.APP_NAME;
     this.navList=appConfig.NAV_LIST;
-    console.log(appConfig);
+
   }
 }

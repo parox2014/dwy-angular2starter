@@ -1,4 +1,4 @@
-System.register(['angular2/core', "angular2/router", './form/profile.form', "./todo/todo", "./tabs/tabs"], function(exports_1) {
+System.register(['angular2/core', "angular2/router", './form/profile.form', "./todo/todo", "./tabs/tabs", './modal/modal'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11,7 +11,7 @@ System.register(['angular2/core', "angular2/router", './form/profile.form', "./t
     var __param = (this && this.__param) || function (paramIndex, decorator) {
         return function (target, key) { decorator(target, key, paramIndex); }
     };
-    var core_1, router_1, profile_form_1, todo_1, tabs_1;
+    var core_1, router_1, profile_form_1, todo_1, tabs_1, modal_1;
     var Angular2Demo;
     return {
         setters:[
@@ -29,13 +29,16 @@ System.register(['angular2/core', "angular2/router", './form/profile.form', "./t
             },
             function (tabs_1_1) {
                 tabs_1 = tabs_1_1;
+            },
+            function (modal_1_1) {
+                modal_1 = modal_1_1;
             }],
         execute: function() {
             Angular2Demo = (function () {
-                function Angular2Demo(appConfig) {
+                function Angular2Demo(appConfig, elRef) {
+                    this.elRef = elRef;
                     this.title = appConfig.APP_NAME;
                     this.navList = appConfig.NAV_LIST;
-                    console.log(appConfig);
                 }
                 Angular2Demo = __decorate([
                     core_1.Component({
@@ -47,9 +50,10 @@ System.register(['angular2/core', "angular2/router", './form/profile.form', "./t
                         { path: "/todo/...", component: todo_1.TodoComponent, name: "Todo", useAsDefault: true },
                         { path: "/profile-form", component: profile_form_1.ProfileForm, name: "ProfileForm" },
                         { path: "/tabs", component: tabs_1.TabComponent, name: "Tabs" },
+                        { path: "/modal", component: modal_1.ModalComponent, name: "Modal" }
                     ]),
                     __param(0, core_1.Inject('appConfig')), 
-                    __metadata('design:paramtypes', [Object])
+                    __metadata('design:paramtypes', [Object, core_1.ElementRef])
                 ], Angular2Demo);
                 return Angular2Demo;
             })();

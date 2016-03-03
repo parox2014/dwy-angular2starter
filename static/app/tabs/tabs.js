@@ -124,6 +124,8 @@ System.register(['angular2/core', '../form/profile.form', '../AnimationComponent
                 TabComponent.prototype.onTabActive = function (pane) {
                     this.currentPane = pane;
                 };
+                TabComponent.prototype.routerOnActivate = function (next, prev) {
+                };
                 TabComponent = __decorate([
                     core_1.Component({
                         selector: 'tab-comp',

@@ -39,7 +39,7 @@ class MyRequestOptions extends BaseRequestOptions {
 const appConfig={
   HOST:'http://www.angular2demo.com',
   APP_NAME:'Angular2 Demo',
-  NAV_LIST:[['Todo', 'Todo'], ['ProfileForm'], ['Tabs']]
+  NAV_LIST:[['Todo', 'Todo'], ['ProfileForm'], ['Tabs'],['Modal']]
 };
 
 bootstrap(Angular2Demo, [ROUTER_PROVIDERS,

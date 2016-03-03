@@ -9,17 +9,22 @@ import {
   AfterContentInit
 } from 'angular2/core';
 
+import {
+  CanActivate,
+  OnActivate,
+  ComponentInstruction
+} from 'angular2/router'
+
 import {ProfileForm} from '../form/profile.form';
 import {AnimationComponent} from '../AnimationComponent';
-
 
 @Component({
   selector: 'tab-pane',
   //directives:[COMMON_DIRECTIVES],
-  inputs:['heading','isActive'],
-  host:{
-    'class':'tab-pane fade',
-    'role':'tabpanel'
+  inputs: ['heading', 'isActive'],
+  host: {
+    'class': 'tab-pane fade',
+    'role': 'tabpanel'
     //'[ngClass]':'{active:isActive,"in":isActive}'
     //'[class.active]':'isActive',
     //'[class.in]':'isActive'
@@ -31,31 +36,34 @@ import {AnimationComponent} from '../AnimationComponent';
 
 export class TabPane {
   public heading:string;
-  public isActive:boolean=false;
-  constructor(private _elRef:ElementRef,private _renderer:Renderer){
+  public isActive:boolean = false;
+
+  constructor(private _elRef:ElementRef, private _renderer:Renderer) {
 
   }
-  show(){
-    this._renderer.setElementClass(this._elRef,'active',true);
-    setTimeout(()=>{
-      this._renderer.setElementClass(this._elRef,'in',true);
-    },50);
-    this.isActive=true;
+
+  show() {
+    this._renderer.setElementClass(this._elRef, 'active', true);
+    setTimeout(()=> {
+      this._renderer.setElementClass(this._elRef, 'in', true);
+    }, 50);
+    this.isActive = true;
   }
-  hide(){
-    this._renderer.setElementClass(this._elRef,'active',false);
-    this._renderer.setElementClass(this._elRef,'in',false);
-    this.isActive=false;
+
+  hide() {
+    this._renderer.setElementClass(this._elRef, 'active', false);
+    this._renderer.setElementClass(this._elRef, 'in', false);
+    this.isActive = false;
   }
 }
 
 @Component({
   selector: 'tabs',
   //directives:[COMMON_DIRECTIVES],
-  inputs:['itemClass','tabAlign'],
-  outputs:['tabActive'],
-  host:{
-    'style':'display:block'
+  inputs: ['itemClass', 'tabAlign'],
+  outputs: ['tabActive'],
+  host: {
+    'style': 'display:block'
   },
   template: `
   <ul class="nav nav-tabs nav-{{tabAlign}}" role="tablist">
@@ -74,7 +82,7 @@ export class TabPane {
   `
 })
 
-export class Tabs implements AfterContentInit{
+export class Tabs implements AfterContentInit {
   public itemClass:string;
   public tabAlign:string;
 
@@ -83,27 +91,30 @@ export class Tabs implements AfterContentInit{
   @ContentChildren(TabPane)
 
   panes:QueryList<TabPane>;
-  constructor(){
+
+  constructor() {
 
   }
 
-  ngAfterContentInit(){
+  ngAfterContentInit() {
     this.onTabItemClick(this.getActivePane());
   }
-  getActivePane():TabPane{
-    let panes=this.panes.toArray();
-    let len:number=this.panes.length;
-    let i:number=0;
+
+  getActivePane():TabPane {
+    let panes = this.panes.toArray();
+    let len:number = this.panes.length;
+    let i:number = 0;
     let pane;
 
-    for(;i<len;i++){
-      pane=panes[i];
-      if(pane.isActive){
+    for (; i < len; i++) {
+      pane = panes[i];
+      if (pane.isActive) {
         break;
       }
     }
     return pane;
   }
+
   onTabItemClick(pane:TabPane):void {
     pane.show();
     this.panes.toArray().forEach((item)=> {
@@ -120,8 +131,8 @@ export class Tabs implements AfterContentInit{
 @Component({
   selector: 'tab-comp',
   directives: [Tabs, TabPane, ProfileForm],
-  host:{
-    'style':'display:block'
+  host: {
+    'style': 'display:block'
   },
   template: `
     <div class="well">current tab is:{{currentPane?currentPane.heading:''}}</div>
@@ -145,16 +156,26 @@ export class Tabs implements AfterContentInit{
   `
 })
 
-export class TabComponent extends AnimationComponent{
+//@CanActivate(function(next:ComponentInstruction,prev:ComponentInstruction){
+//
+//  return false;
+//})
+
+export class TabComponent extends AnimationComponent implements OnActivate{
 
   currentPane:TabPane;
-  public animation:string='slide';
-  public direction:string='leftToRight';
-  constructor(public elRef:ElementRef,public renderer:Renderer){
-    super(elRef,renderer);
+  public animation:string = 'slide';
+  public direction:string = 'leftToRight';
+
+  constructor(public elRef:ElementRef, public renderer:Renderer) {
+    super(elRef, renderer);
   }
 
   onTabActive(pane:TabPane) {
     this.currentPane = pane;
+  }
+
+  routerOnActivate(next:ComponentInstruction,prev:ComponentInstruction){
+
   }
 }
