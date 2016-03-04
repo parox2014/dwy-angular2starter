@@ -14,7 +14,9 @@ import {
   Query,
   Inject,
   Input,
-  Output
+  Output,
+  EventEmitter,
+  AfterViewInit
 } from 'angular2/core'
 
 import {ProfileForm} from '../form/profile.form';
@@ -23,7 +25,68 @@ import {Angular2Demo} from "../app";
 import {DomRenderer} from "angular2/src/platform/dom/dom_renderer";
 import {COMMON_DIRECTIVES,FormBuilder} from "angular2/common";
 
+import {Observable} from 'rxjs/Observable'
+import {Observer} from 'rxjs/Observer'
+import {Http,Response,RequestOptions,RequestOptionsArgs,URLSearchParams,Headers} from "angular2/http";
+
+const zone=window['zone']||{};
 const TRANSITION_END = 'transitionend webkitTransitionEnd oTransitionEnd mozTransitionEnd msTransitionEnd';
+
+@Component({
+  selector: 'modal-header',
+  inputs: ['modalTitle'],
+  outputs: ['onClose'],
+  host: {
+    'class': 'modal-header',
+    'style': 'display:block',
+    'role': 'header',
+    'aria-label': 'modal-header'
+  },
+  template: `
+    <button type="button" class="close" aria-label="Close">
+      <span aria-hidden="true" (click)="onClick($event)">&times;</span>
+    </button>
+    <h4 class="modal-title">{{modalTitle}}</h4>
+  `
+})
+
+export class ModalHeader {
+  onClose = new EventEmitter<any>();
+
+  onClick(e) {
+    this.onClose.emit(e);
+  }
+}
+
+@Component({
+  selector: 'modal-footer',
+  inputs: ['okText', 'cancelText'],
+  outputs: ['onCancel', 'onConfirm'],
+  host: {
+    'class': 'modal-footer',
+    'style': 'display:block',
+    'role': 'footer',
+    'aria-label': 'modal-footer'
+  },
+  template: `
+    <button type="button" class="btn btn-default" (click)="onCancelButtonClick($event)">{{cancelText}}</button>
+    <button type="button" class="btn btn-primary" (click)="onConfirmButtonClick()">{{okText}}</button>
+  `
+})
+
+export class ModalFooter {
+  onCancel = new EventEmitter<any>();
+  onConfirm = new EventEmitter<any>();
+
+  onCancelButtonClick(e:any):void {
+    this.onCancel.emit(e);
+  }
+
+  onConfirmButtonClick(e:any):void {
+    this.onConfirm.emit(e);
+  }
+}
+
 
 @Component({
   selector: 'modal',
@@ -31,44 +94,53 @@ const TRANSITION_END = 'transitionend webkitTransitionEnd oTransitionEnd mozTran
     'class': 'modal fade',
     'role': 'dialog'
   },
-  directives: [COMMON_DIRECTIVES, ProfileForm],
+  directives: [COMMON_DIRECTIVES, ModalHeader, ModalFooter],
   template: `
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" aria-label="Close">
-          <span aria-hidden="true" (click)="cancel()">&times;</span>
-        </button>
-        <h4 class="modal-title">{{title}}</h4>
-      </div>
+
+      <modal-header [modalTitle]="title" (onClose)="cancel($event)" *ngIf="showHeader"></modal-header>
+
       <div class="modal-body">
         <p>{{template}}</p>
+        <template #template></template>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" (click)="cancel()">{{cancelText}}</button>
-        <button type="button" class="btn btn-primary" (click)="confirm()">{{okText}}</button>
-      </div>
+
+      <modal-footer *ngIf="showFooter"
+        [okText]="okText"
+        [cancelText]="cancelText"
+        (onConfirm)="confirm($event)"
+        (onCancel)="cancel($event)">
+      </modal-footer>
     </div><!-- /.modal-content -->
   </div>
   `
 })
 
-export class Modal {
+export class Modal implements AfterViewInit {
 
   @Input() title:string = 'Are you sure';
   @Input() okText:string = 'Remove';
   @Input() cancelText:string = 'Cancel';
   @Input() tempalte:string;
+  @Input() showHeader:boolean = true;
+  @Input() showFooter:boolean = true;
 
   constructor(public renderer:Renderer,
               public elRef:ElementRef,
+              @Query('template') public tempRef:TemplateRef,
               public vcRef:ViewContainerRef) {
 
   }
 
-  setTitle(title:string):Modal {
-    this.title = title;
-    return this;
+  ngAfterViewInit() {
+
+  }
+
+  confirm() {
+  }
+
+  cancel() {
   }
 
   open():void {
@@ -77,12 +149,12 @@ export class Modal {
 
     renderer.setElementStyle(elRef, 'display', 'block');
 
-    setTimeout(()=> {
+    zone.setTimeout(()=> {
       renderer.setElementClass(elRef, 'in', true);
-    }, 50);
+    }, 0);
   }
 
-  close(callback):void {
+  close(callback:Function):void {
     var renderer = this.renderer;
     var elRef = this.elRef;
     var onTransitionEnd = ()=> {
@@ -95,11 +167,11 @@ export class Modal {
     renderer.setElementClass(elRef, 'in', false);
   }
 
-  on(evtName, listener):void {
+  on(evtName:string, listener:Function):void {
     this.handleEventListener(evtName, listener);
   }
 
-  off(evtName, listener):void {
+  off(evtName:string, listener:Function):void {
     this.handleEventListener(evtName, listener, 'removeEventListener');
   }
 
@@ -114,7 +186,15 @@ export class Modal {
   }
 }
 
-var counter = 0;
+interface ModalOption {
+  title?:string;
+  okText?:string;
+  cancelText?:string;
+  showHeader?:boolean;
+  showFooter?:boolean;
+}
+
+
 @Injectable()
 export class Dialog {
   app:Angular2Demo;
@@ -125,25 +205,23 @@ export class Dialog {
     this.app = app;
   }
 
-  open(tempalte) {
-    counter += 1;
-
-    let id:string = `dialog-${counter}`;
+  open(tempalte:string, option?:ModalOption):Observable {
 
     let injector = Injector.resolve([
-      provide(Renderer, {useClass: DomRenderer}),
-      provide(TemplateRef, {useClass: TemplateRef})
-
-      //provide(FormBuilder,{useClass:FormBuilder})
+      provide(Renderer, {useClass: DomRenderer})
     ]);
 
-    return new Promise((resolve, reject)=> {
+    return new Observable(subscriber=> {
       this
         .dcl
         .loadNextToLocation(Modal, this.app.elRef, injector)
         .then((compRef:ComponentRef)=> {
           var instance = compRef.instance;
           var oldClose = instance.close;
+
+          if (option) {
+            Object.assign(instance, option);
+          }
 
           instance.close = function () {
             oldClose.call(instance, ()=> {
@@ -153,48 +231,52 @@ export class Dialog {
 
           instance.cancel = function () {
             this.close();
-            resolve(false);
+            subscriber.next(false);
+            subscriber.complete();
           };
 
           instance.confirm = function () {
             this.close();
-            resolve(true);
+            subscriber.next(true);
+            subscriber.complete();
           };
 
           instance.template = tempalte;
+
           instance.open();
         })
         .catch((err)=> {
-          reject(err);
+          subscriber.error(err);
         });
-    })
+    });
   }
 }
 
 @Component({
   selector: 'modal-component',
   providers: [Dialog],
+  directives: [Modal],
   template: `
     <button class="btn btn-primary" (click)="onBtnClick()">Open Modal</button>
+    <h1>{{data}}</h1>
   `
 })
 
 export class ModalComponent {
-  constructor(public dialog:Dialog) {
+  data:string;
 
+  constructor(public dialog:Dialog, public http:Http) {
   }
 
   onBtnClick() {
-    this.dialog.open('Are you sure to remove this todo?')
-      .then(function (result) {
+    this.dialog
+      .open('Are you sure suck my dick?')
+      .subscribe(result=> {
         if (result) {
-          alert('you confirmed');
+          zone.alert('you suck');
         } else {
-          alert('you canceled');
+          zone.alert('you do not suck');
         }
-      })
-      .catch((err)=> {
-
       });
   }
 }

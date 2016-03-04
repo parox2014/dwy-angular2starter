@@ -1,4 +1,4 @@
-System.register(['angular2/core', '../form/profile.form', "../app", "angular2/src/platform/dom/dom_renderer", "angular2/common"], function(exports_1) {
+System.register(['angular2/core', "../app", "angular2/src/platform/dom/dom_renderer", "angular2/common", 'rxjs/Observable', "angular2/http"], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11,15 +11,12 @@ System.register(['angular2/core', '../form/profile.form', "../app", "angular2/sr
     var __param = (this && this.__param) || function (paramIndex, decorator) {
         return function (target, key) { decorator(target, key, paramIndex); }
     };
-    var core_1, profile_form_1, app_1, dom_renderer_1, common_1;
-    var TRANSITION_END, Modal, counter, Dialog, ModalComponent;
+    var core_1, app_1, dom_renderer_1, common_1, Observable_1, http_1;
+    var zone, TRANSITION_END, ModalHeader, ModalFooter, Modal, Dialog, ModalComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
-            },
-            function (profile_form_1_1) {
-                profile_form_1 = profile_form_1_1;
             },
             function (app_1_1) {
                 app_1 = app_1_1;
@@ -29,29 +26,95 @@ System.register(['angular2/core', '../form/profile.form', "../app", "angular2/sr
             },
             function (common_1_1) {
                 common_1 = common_1_1;
+            },
+            function (Observable_1_1) {
+                Observable_1 = Observable_1_1;
+            },
+            function (http_1_1) {
+                http_1 = http_1_1;
             }],
         execute: function() {
+            zone = window['zone'] || {};
             TRANSITION_END = 'transitionend webkitTransitionEnd oTransitionEnd mozTransitionEnd msTransitionEnd';
+            ModalHeader = (function () {
+                function ModalHeader() {
+                    this.onClose = new core_1.EventEmitter();
+                }
+                ModalHeader.prototype.onClick = function (e) {
+                    this.onClose.emit(e);
+                };
+                ModalHeader = __decorate([
+                    core_1.Component({
+                        selector: 'modal-header',
+                        inputs: ['modalTitle'],
+                        outputs: ['onClose'],
+                        host: {
+                            'class': 'modal-header',
+                            'style': 'display:block',
+                            'role': 'header',
+                            'aria-label': 'modal-header'
+                        },
+                        template: "\n    <button type=\"button\" class=\"close\" aria-label=\"Close\">\n      <span aria-hidden=\"true\" (click)=\"onClick($event)\">&times;</span>\n    </button>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n  "
+                    }), 
+                    __metadata('design:paramtypes', [])
+                ], ModalHeader);
+                return ModalHeader;
+            })();
+            exports_1("ModalHeader", ModalHeader);
+            ModalFooter = (function () {
+                function ModalFooter() {
+                    this.onCancel = new core_1.EventEmitter();
+                    this.onConfirm = new core_1.EventEmitter();
+                }
+                ModalFooter.prototype.onCancelButtonClick = function (e) {
+                    this.onCancel.emit(e);
+                };
+                ModalFooter.prototype.onConfirmButtonClick = function (e) {
+                    this.onConfirm.emit(e);
+                };
+                ModalFooter = __decorate([
+                    core_1.Component({
+                        selector: 'modal-footer',
+                        inputs: ['okText', 'cancelText'],
+                        outputs: ['onCancel', 'onConfirm'],
+                        host: {
+                            'class': 'modal-footer',
+                            'style': 'display:block',
+                            'role': 'footer',
+                            'aria-label': 'modal-footer'
+                        },
+                        template: "\n    <button type=\"button\" class=\"btn btn-default\" (click)=\"onCancelButtonClick($event)\">{{cancelText}}</button>\n    <button type=\"button\" class=\"btn btn-primary\" (click)=\"onConfirmButtonClick()\">{{okText}}</button>\n  "
+                    }), 
+                    __metadata('design:paramtypes', [])
+                ], ModalFooter);
+                return ModalFooter;
+            })();
+            exports_1("ModalFooter", ModalFooter);
             Modal = (function () {
-                function Modal(renderer, elRef, vcRef) {
+                function Modal(renderer, elRef, tempRef, vcRef) {
                     this.renderer = renderer;
                     this.elRef = elRef;
+                    this.tempRef = tempRef;
                     this.vcRef = vcRef;
                     this.title = 'Are you sure';
                     this.okText = 'Remove';
                     this.cancelText = 'Cancel';
+                    this.showHeader = true;
+                    this.showFooter = true;
                 }
-                Modal.prototype.setTitle = function (title) {
-                    this.title = title;
-                    return this;
+                Modal.prototype.ngAfterViewInit = function () {
+                };
+                Modal.prototype.confirm = function () {
+                };
+                Modal.prototype.cancel = function () {
                 };
                 Modal.prototype.open = function () {
                     var elRef = this.elRef;
                     var renderer = this.renderer;
                     renderer.setElementStyle(elRef, 'display', 'block');
-                    setTimeout(function () {
+                    zone.setTimeout(function () {
                         renderer.setElementClass(elRef, 'in', true);
-                    }, 50);
+                    }, 0);
                 };
                 Modal.prototype.close = function (callback) {
                     var _this = this;
@@ -95,6 +158,14 @@ System.register(['angular2/core', '../form/profile.form', "../app", "angular2/sr
                     core_1.Input(), 
                     __metadata('design:type', String)
                 ], Modal.prototype, "tempalte", void 0);
+                __decorate([
+                    core_1.Input(), 
+                    __metadata('design:type', Boolean)
+                ], Modal.prototype, "showHeader", void 0);
+                __decorate([
+                    core_1.Input(), 
+                    __metadata('design:type', Boolean)
+                ], Modal.prototype, "showFooter", void 0);
                 Modal = __decorate([
                     core_1.Component({
                         selector: 'modal',
@@ -102,36 +173,36 @@ System.register(['angular2/core', '../form/profile.form', "../app", "angular2/sr
                             'class': 'modal fade',
                             'role': 'dialog'
                         },
-                        directives: [common_1.COMMON_DIRECTIVES, profile_form_1.ProfileForm],
-                        template: "\n  <div class=\"modal-dialog\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" aria-label=\"Close\">\n          <span aria-hidden=\"true\" (click)=\"cancel()\">&times;</span>\n        </button>\n        <h4 class=\"modal-title\">{{title}}</h4>\n      </div>\n      <div class=\"modal-body\">\n        <p>{{template}}</p>\n      </div>\n      <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default\" (click)=\"cancel()\">{{cancelText}}</button>\n        <button type=\"button\" class=\"btn btn-primary\" (click)=\"confirm()\">{{okText}}</button>\n      </div>\n    </div><!-- /.modal-content -->\n  </div>\n  "
-                    }), 
-                    __metadata('design:paramtypes', [core_1.Renderer, core_1.ElementRef, core_1.ViewContainerRef])
+                        directives: [common_1.COMMON_DIRECTIVES, ModalHeader, ModalFooter],
+                        template: "\n  <div class=\"modal-dialog\">\n    <div class=\"modal-content\">\n\n      <modal-header [modalTitle]=\"title\" (onClose)=\"cancel($event)\" *ngIf=\"showHeader\"></modal-header>\n\n      <div class=\"modal-body\">\n        <p>{{template}}</p>\n        <template #template></template>\n      </div>\n\n      <modal-footer *ngIf=\"showFooter\"\n        [okText]=\"okText\"\n        [cancelText]=\"cancelText\"\n        (onConfirm)=\"confirm($event)\"\n        (onCancel)=\"cancel($event)\">\n      </modal-footer>\n    </div><!-- /.modal-content -->\n  </div>\n  "
+                    }),
+                    __param(2, core_1.Query('template')), 
+                    __metadata('design:paramtypes', [core_1.Renderer, core_1.ElementRef, core_1.TemplateRef, core_1.ViewContainerRef])
                 ], Modal);
                 return Modal;
             })();
             exports_1("Modal", Modal);
-            counter = 0;
             Dialog = (function () {
                 function Dialog(dcl, app, injector) {
                     this.dcl = dcl;
                     this.injector = injector;
                     this.app = app;
                 }
-                Dialog.prototype.open = function (tempalte) {
+                Dialog.prototype.open = function (tempalte, option) {
                     var _this = this;
-                    counter += 1;
-                    var id = "dialog-" + counter;
                     var injector = core_1.Injector.resolve([
-                        core_1.provide(core_1.Renderer, { useClass: dom_renderer_1.DomRenderer }),
-                        core_1.provide(core_1.TemplateRef, { useClass: core_1.TemplateRef })
+                        core_1.provide(core_1.Renderer, { useClass: dom_renderer_1.DomRenderer })
                     ]);
-                    return new Promise(function (resolve, reject) {
+                    return new Observable_1.Observable(function (subscriber) {
                         _this
                             .dcl
                             .loadNextToLocation(Modal, _this.app.elRef, injector)
                             .then(function (compRef) {
                             var instance = compRef.instance;
                             var oldClose = instance.close;
+                            if (option) {
+                                Object.assign(instance, option);
+                            }
                             instance.close = function () {
                                 oldClose.call(instance, function () {
                                     compRef.dispose();
@@ -139,17 +210,19 @@ System.register(['angular2/core', '../form/profile.form', "../app", "angular2/sr
                             };
                             instance.cancel = function () {
                                 this.close();
-                                resolve(false);
+                                subscriber.next(false);
+                                subscriber.complete();
                             };
                             instance.confirm = function () {
                                 this.close();
-                                resolve(true);
+                                subscriber.next(true);
+                                subscriber.complete();
                             };
                             instance.template = tempalte;
                             instance.open();
                         })
                             .catch(function (err) {
-                            reject(err);
+                            subscriber.error(err);
                         });
                     });
                 };
@@ -162,29 +235,30 @@ System.register(['angular2/core', '../form/profile.form', "../app", "angular2/sr
             })();
             exports_1("Dialog", Dialog);
             ModalComponent = (function () {
-                function ModalComponent(dialog) {
+                function ModalComponent(dialog, http) {
                     this.dialog = dialog;
+                    this.http = http;
                 }
                 ModalComponent.prototype.onBtnClick = function () {
-                    this.dialog.open('Are you sure to remove this todo?')
-                        .then(function (result) {
+                    this.dialog
+                        .open('Are you sure suck my dick?')
+                        .subscribe(function (result) {
                         if (result) {
-                            alert('you confirmed');
+                            zone.alert('you suck');
                         }
                         else {
-                            alert('you canceled');
+                            zone.alert('you do not suck');
                         }
-                    })
-                        .catch(function (err) {
                     });
                 };
                 ModalComponent = __decorate([
                     core_1.Component({
                         selector: 'modal-component',
                         providers: [Dialog],
-                        template: "\n    <button class=\"btn btn-primary\" (click)=\"onBtnClick()\">Open Modal</button>\n  "
+                        directives: [Modal],
+                        template: "\n    <button class=\"btn btn-primary\" (click)=\"onBtnClick()\">Open Modal</button>\n    <h1>{{data}}</h1>\n  "
                     }), 
-                    __metadata('design:paramtypes', [Dialog])
+                    __metadata('design:paramtypes', [Dialog, http_1.Http])
                 ], ModalComponent);
                 return ModalComponent;
             })();

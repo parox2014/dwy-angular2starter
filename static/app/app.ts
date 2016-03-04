@@ -5,6 +5,7 @@ import {
 } from 'angular2/core';
 
 import {
+  Router,
   RouteConfig,
   ROUTER_DIRECTIVES
 } from "angular2/router";
@@ -30,8 +31,8 @@ import {ModalComponent} from './modal/modal'
         </div>
 
         <ul class="nav navbar-nav">
-          <li *ngFor="#nav of navList">
-            <a [routerLink]="nav">{{nav[0]}}</a>
+          <li *ngFor="#nav of navList" [class.current]="isCurrentRouter(nav)">
+            <a [routerLink]="nav.route">{{nav.route[0]}}</a>
           </li>
         </ul>
       </div>
@@ -54,9 +55,18 @@ import {ModalComponent} from './modal/modal'
 export class Angular2Demo{
   private title:string;
   public navList:Array<any>;
-  constructor(@Inject('appConfig') appConfig,public elRef:ElementRef){
+  public currentRoute:string;
+  constructor(@Inject('appConfig') appConfig,public router:Router,public elRef:ElementRef){
     this.title=appConfig.APP_NAME;
     this.navList=appConfig.NAV_LIST;
 
+  }
+  isCurrentRouter(nav){
+    return nav.path.indexOf(this.currentRoute)>-1;
+  }
+  ngOnInit(){
+    this.router.subscribe((path:string)=>{
+      this.currentRoute=path;
+    });
   }
 }

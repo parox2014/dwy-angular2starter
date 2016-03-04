@@ -47,7 +47,12 @@ System.register(['angular2/platform/browser', './app', './directives/directives'
             appConfig = {
                 HOST: 'http://www.angular2demo.com',
                 APP_NAME: 'Angular2 Demo',
-                NAV_LIST: [['Todo', 'Todo'], ['ProfileForm'], ['Tabs'], ['Modal']]
+                NAV_LIST: [
+                    { route: ['Todo', 'Todo'], path: '/todo' },
+                    { route: ['ProfileForm'], path: '/profile-form' },
+                    { route: ['Tabs'], path: '/tabs' },
+                    { route: ['Modal'], path: '/modal' }
+                ]
             };
             browser_1.bootstrap(app_1.Angular2Demo, [router_1.ROUTER_PROVIDERS,
                 http_1.HTTP_PROVIDERS,

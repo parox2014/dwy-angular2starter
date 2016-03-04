@@ -45,7 +45,6 @@ System.register([], function(exports_1) {
                 };
                 AnimationComponent.prototype.ngOnDestroy = function () {
                     this.renderer.setElementClass(this.elRef, 'in', false);
-                    console.log(this.animation);
                 };
                 return AnimationComponent;
             })();

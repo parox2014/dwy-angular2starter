@@ -62,7 +62,7 @@ System.register(['angular2/core', './todo.item', '../services/TodoService', './t
                 TodoList.prototype.onRemove = function (id) {
                     var _this = this;
                     this.dialog.open('Are you sure to remove this todo?')
-                        .then(function (sure) {
+                        .subscribe(function (sure) {
                         if (sure) {
                             _this.todoService.removeById(id);
                             _this.query();

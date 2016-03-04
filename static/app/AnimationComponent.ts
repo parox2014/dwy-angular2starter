@@ -47,6 +47,5 @@ export class AnimationComponent implements OnDestroy, AfterContentInit,OnInit {
 
   ngOnDestroy() {
     this.renderer.setElementClass(this.elRef, 'in', false);
-    console.log(this.animation);
   }
 }

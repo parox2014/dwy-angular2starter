@@ -66,7 +66,7 @@ export class TodoList {
 
   onRemove(id:number) {
     this.dialog.open('Are you sure to remove this todo?')
-      .then((sure)=> {
+      .subscribe(sure=> {
         if(sure){
           this.todoService.removeById(id);
           this.query();

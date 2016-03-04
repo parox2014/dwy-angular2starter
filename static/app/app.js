@@ -35,16 +35,26 @@ System.register(['angular2/core', "angular2/router", './form/profile.form', "./t
             }],
         execute: function() {
             Angular2Demo = (function () {
-                function Angular2Demo(appConfig, elRef) {
+                function Angular2Demo(appConfig, router, elRef) {
+                    this.router = router;
                     this.elRef = elRef;
                     this.title = appConfig.APP_NAME;
                     this.navList = appConfig.NAV_LIST;
                 }
+                Angular2Demo.prototype.isCurrentRouter = function (nav) {
+                    return nav.path.indexOf(this.currentRoute) > -1;
+                };
+                Angular2Demo.prototype.ngOnInit = function () {
+                    var _this = this;
+                    this.router.subscribe(function (path) {
+                        _this.currentRoute = path;
+                    });
+                };
                 Angular2Demo = __decorate([
                     core_1.Component({
                         selector: "angular2-demo",
                         directives: [router_1.ROUTER_DIRECTIVES],
-                        template: "\n  <nav class=\"navbar navbar-diy\">\n      <div class=\"container-fluid\">\n        <div class=\"navbar-header\">\n          <div class=\"navbar-brand\">\n            <a href=\"#/\">\n              {{title}}\n            </a>\n          </div>\n        </div>\n\n        <ul class=\"nav navbar-nav\">\n          <li *ngFor=\"#nav of navList\">\n            <a [routerLink]=\"nav\">{{nav[0]}}</a>\n          </li>\n        </ul>\n      </div>\n    </nav>\n  <div class=\"container\">\n    <!--\u58F0\u660E\u8DEF\u7531\u51FA\u53E3-->\n    <router-outlet></router-outlet>\n  </div>\n\t"
+                        template: "\n  <nav class=\"navbar navbar-diy\">\n      <div class=\"container-fluid\">\n        <div class=\"navbar-header\">\n          <div class=\"navbar-brand\">\n            <a href=\"#/\">\n              {{title}}\n            </a>\n          </div>\n        </div>\n\n        <ul class=\"nav navbar-nav\">\n          <li *ngFor=\"#nav of navList\" [class.current]=\"isCurrentRouter(nav)\">\n            <a [routerLink]=\"nav.route\">{{nav.route[0]}}</a>\n          </li>\n        </ul>\n      </div>\n    </nav>\n  <div class=\"container\">\n    <!--\u58F0\u660E\u8DEF\u7531\u51FA\u53E3-->\n    <router-outlet></router-outlet>\n  </div>\n\t"
                     }),
                     router_1.RouteConfig([
                         { path: "/todo/...", component: todo_1.TodoComponent, name: "Todo", useAsDefault: true },
@@ -53,7 +63,7 @@ System.register(['angular2/core', "angular2/router", './form/profile.form', "./t
                         { path: "/modal", component: modal_1.ModalComponent, name: "Modal" }
                     ]),
                     __param(0, core_1.Inject('appConfig')), 
-                    __metadata('design:paramtypes', [Object, core_1.ElementRef])
+                    __metadata('design:paramtypes', [Object, router_1.Router, core_1.ElementRef])
                 ], Angular2Demo);
                 return Angular2Demo;
             })();
